@@ -10,7 +10,7 @@ function App() {
        </h1>
 
        <h3>
-        Deployed by S8gun
+        Deployed by Owzbi
        </h3>
       </header>
     </div>
