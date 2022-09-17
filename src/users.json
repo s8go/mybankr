@@ -1,0 +1,15 @@
+ [
+  {
+    "fullName": "Segun",
+    "username": "sg",
+    "password": 12345,
+    "accountBalance": 2500
+  },
+  {
+    "fullName": "Ogo-oluwa",
+    "username": "og",
+    "password": 12345,
+    "accountBalance": 500
+
+  }
+]
