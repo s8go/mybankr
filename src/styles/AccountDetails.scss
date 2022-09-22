@@ -1,0 +1,107 @@
+@import "./Variables";
+
+.my-account {
+  background-color: $White;
+  padding: 1em;
+}
+
+.account-details {
+  background-color: $Red;
+  padding: 1em;
+  border-top-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+  margin-top: 0.2em;
+
+  .account-name {
+    color: $White;
+    text-align: left;
+    padding: 1em;
+
+    h3 {
+      font-size: 1.2em;
+    }
+  }
+
+  .account-balance {
+    padding: 1em;
+    margin-top: 0.2em;
+    color: $White;
+    background: linear-gradient(
+      to bottom right,
+      $DarkRed,
+      $DarkRed,
+      rgba(110, 0, 0, 0),
+      $DarkRed,
+      $DarkRed
+    );
+    border-bottom-right-radius: 1em;
+    border-top-left-radius: 1em;
+
+    h3 {
+      font-size: 1em;
+      color: $Gray;
+    }
+
+    h6 {
+      font-size: 1.5em;
+      width: 100%;
+    }
+  }
+}
+
+.transaction-list {
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  place-content: center;
+
+  .transactions {
+    margin: 0.5em 0.5em 0.3em;
+    padding: 1em 0;
+    width: clamp(5em, 100px, 100%);
+    font-size: 1em;
+    color: $DarkRed;
+    border-top-left-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+    cursor: pointer;
+
+    // border: 1px groove $DarkRed;
+    box-shadow: 2px 2px 5px $DarkRed;
+  }
+}
+
+.recent-transaction {
+  h5 {
+    background-color: $Red;
+    color: $White;
+    text-align: left;
+    padding: 1em;
+    font-size: 1em;
+  }
+
+  .trans-record {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8em 1em;
+    border-bottom: 1px solid $DarkRed;
+    text-align: left;
+  }
+
+  .details {
+    h4 {
+      color: $Black;
+      font-size: 1em;
+    }
+
+    p {
+      font-size: .7em;
+      margin-top: 0.3em;
+      color: $Gray;
+    }
+  }
+
+  .price {
+    color: $LightGreen;
+    font-weight: 900;
+  }
+}

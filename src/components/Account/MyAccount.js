@@ -4,10 +4,10 @@ import AccountDetails from "./AccountDetails";
 const MyAccount = () => {
   return (
     <>
-      <header>
+      {/* <header>
         <nav>menu</nav>
         <p>logo</p>
-      </header>
+      </header> */}
 
       <AccountDetails/>
     </>

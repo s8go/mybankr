@@ -1,0 +1,46 @@
+@import "./Variables.scss";
+
+.signup-container {
+   @extend .form-design;
+}
+
+
+.input-div {
+  margin-top: 0.7em;
+  padding: 0.4em;
+
+  input {
+    padding: 1em;
+    display: inline-block;
+    width: clamp(200px, 100%, 20em);
+    font-size: 1em;
+    color: $Black;
+    border-top-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    border: 5px solid $Red;
+    text-align: center;
+
+    &::placeholder {
+      font-size: 1em;
+      color: $Gray;
+    }
+
+    &:focus{
+      border: 5px solid $Black;
+      outline: none;
+    }
+
+  }
+
+  
+  input[type="submit"] {
+    padding: 0.5em;
+    font-size: 0.9em;
+    width: clamp(6em, 120px, 20%);
+    background-color: $White;
+    border: 3px solid $Black;
+    color: $Black;
+    font-size: max(1em, 1vw);
+    cursor: pointer;
+  }
+}

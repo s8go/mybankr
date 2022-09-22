@@ -1,0 +1,17 @@
+@import "./Variables.scss";
+@import "./AccountDetails";
+@import "./Signup";
+@import "./Login";
+
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.App {
+  text-align: center;
+  background-color: $White;
+  height: 100vh;
+}

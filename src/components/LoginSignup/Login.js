@@ -1,11 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Login = ({validateUser}) => {
+const Login = ({ validateUser }) => {
   const [loggedUser, setLoggedUser] = useState({});
+  const [signedIn, setSignedIn] = useState(false);
+  const Navigate = useNavigate(); 
 
   /*
 This is the input onChange function to get input details
 */
+
+useEffect(()=>{
+setTimeout(()=>{
+  if(signedIn) Navigate("/my-account");
+}, 300)
+}, [signedIn])
 
   function loginDetails(event) {
     setLoggedUser((curr) => {
@@ -19,9 +28,10 @@ This is the input onChange function to get input details
         onSubmit={(e) => {
           e.preventDefault();
           validateUser(loggedUser);
+          setSignedIn(true)
         }}
       >
-        <div>
+        <div className="input-div">
           <input
             type="text"
             placeholder="username"
@@ -31,7 +41,7 @@ This is the input onChange function to get input details
           />
         </div>
 
-        <div>
+        <div className="input-div">
           <input
             type="password"
             placeholder="password"
@@ -41,19 +51,20 @@ This is the input onChange function to get input details
           />
         </div>
 
-        <div>
-          <button type="submit">Log In</button>
+        <div className="input-div">
+          <input type="submit" value={signedIn ? "Loading..." : "Log In"} />
         </div>
         <div>
+
+
+          {/* <div className="sign-in-opt">
           <div className="alternate">
             <h4>or sign in with</h4>
           </div>
-
-          <div>
             <div className="google">Google</div>
 
             <div className="facebook">Facebook</div>
-          </div>
+          </div> */}
         </div>
       </form>
 

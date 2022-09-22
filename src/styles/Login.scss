@@ -1,0 +1,31 @@
+@import './Variables.scss';
+
+.login-wrap{
+    @extend .form-design;
+}
+
+.sign-in-opt{
+    color: $White;
+    .alternate{
+h4{
+    font-size: 1em;
+}
+    }
+}
+
+p{
+    padding: .5em;
+
+    span{
+        font-size: .8em;
+        color: $Black;
+        padding: .1em;
+        cursor: pointer;
+        transition: .5s;
+        &:hover{
+            color: $Gray;
+        }
+    }
+
+}
+

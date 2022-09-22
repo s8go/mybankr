@@ -5,38 +5,49 @@ const AccountDetails = () => {
   const currentUser = useContext(userDetails);
 
   return (
-    <div>
-      <div className="account-details">
-        <div className="details">
-        <div className="account-name">
-  
-          <h3>{`Hello, ${currentUser.fullName || ""}`}</h3>
+    <>
+      <div className="my-account">
+        <div className="account-details">
+          <div className="account-name">
+            <h3>{`Hello, ${currentUser.fullName || ""}`}</h3>
           </div>
-
 
           <div className="account-balance">
-          <h6>Account Balance</h6>
-          <h3>{currentUser.accountBalance || 0.0}</h3>
+            <h3>Account Balance</h3>
+            <h6>{currentUser.accountBalance || 0.0}</h6>
           </div>
+        </div>
 
+        <div className="transaction-list">
+          <div className="transactions deposit">deposit</div>
 
+          <div className="transactions withdraw">withdraw</div>
+
+          <div className="transactions transfer">transfer</div>
+
+          <div className="transactions saving">saving</div>
+
+          <div className="transactions loan">loan</div>
+
+          <div className="transactions Pay Bills">Pay Bills</div>
         </div>
       </div>
 
-      <div className="transaction-list">
-        <div className="transactions deposit">deposit</div>
+      <div className="recent-transaction">
+        <h5>Recent Transactions</h5>
 
-        <div className="transactions withdraw">withdraw</div>
+        <div className="trans-record">
+          <div className="details">
+            <h4>Owzbi</h4>
+            <p>01:45 PM</p>
+          </div>
 
-        <div className="transactions transfer">transfer</div>
-
-        <div className="transactions saving">saving</div>
-
-        <div className="transactions loan">loan</div>
-
-        <div className="transactions Pay Bills">Pay Bills</div>
+          <div className="price">
+            <p>5000</p>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
