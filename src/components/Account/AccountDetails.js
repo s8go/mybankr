@@ -1,15 +1,16 @@
-import React, { useContext } from "react";
-import { userDetails } from "../../App";
+import React from "react";
+// import {userDetails} from "../../App"
 
-const AccountDetails = () => {
-  const currentUser = useContext(userDetails);
 
+const AccountDetails = ({ initTransaction, completeTransaction , currentUser}) => {
+// console.log(currentUser)
   return (
     <>
       <div className="my-account">
         <div className="account-details">
           <div className="account-name">
-            <h3>{`Hello, ${currentUser.fullName || ""}`}</h3>
+            <h3>{`Hello, ${currentUser.username || ""}`}</h3>
+            <p>{currentUser.email}</p>
           </div>
 
           <div className="account-balance">
@@ -19,15 +20,30 @@ const AccountDetails = () => {
         </div>
 
         <div className="transaction-list">
-          <div className="transactions deposit">deposit</div>
+          <div
+            className="transactions deposit"
+            onClick={() => initTransaction("deposit")}
+          >
+            deposit
+          </div>
 
           <div className="transactions withdraw">withdraw</div>
 
-          <div className="transactions transfer">transfer</div>
+          <div
+            className="transactions"
+            onClick={() => initTransaction("transfer")}
+          >
+            transfer
+          </div>
 
           <div className="transactions saving">saving</div>
 
-          <div className="transactions loan">loan</div>
+          <div
+            className="transactions loan"
+            onClick={() => initTransaction("loan")}
+          >
+            loan
+          </div>
 
           <div className="transactions Pay Bills">Pay Bills</div>
         </div>
@@ -36,16 +52,25 @@ const AccountDetails = () => {
       <div className="recent-transaction">
         <h5>Recent Transactions</h5>
 
-        <div className="trans-record">
-          <div className="details">
-            <h4>Owzbi</h4>
-            <p>01:45 PM</p>
-          </div>
+        {currentUser.transactions.map((trans, i) => {
+          return (
+            <div className="trans-record" key={i}>
+              <div className="details">
+                <h4>{trans.from || trans.to}</h4>
 
-          <div className="price">
-            <p>5000</p>
-          </div>
-        </div>
+                <p>{trans.number}</p>
+              </div>
+
+              <div className="price">
+                <p style={trans.to && { color: "red" }}>{trans.amount}</p>
+              </div>
+            </div>
+          );
+        })}
+
+        {
+          // currentUser.transactions
+        }
       </div>
     </>
   );

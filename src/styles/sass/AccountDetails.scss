@@ -3,6 +3,7 @@
 .my-account {
   background-color: $White;
   padding: 1em;
+  padding-top: max(5em, 8vw);
 }
 
 .account-details {
@@ -16,35 +17,39 @@
     color: $White;
     text-align: left;
     padding: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 
     h3 {
-      font-size: 1.2em;
+      font-size: max(0.8em, 1vw);
+    }
+
+    p {
+      color: $Gray;
+      font-size: max(0.5em, 0.7vw);
+      text-align: right;
     }
   }
-
+  
   .account-balance {
     padding: 1em;
     margin-top: 0.2em;
     color: $White;
-    background: linear-gradient(
-      to bottom right,
-      $DarkRed,
-      $DarkRed,
-      rgba(110, 0, 0, 0),
-      $DarkRed,
-      $DarkRed
-    );
+    background: $DarkRed;
     border-bottom-right-radius: 1em;
     border-top-left-radius: 1em;
 
     h3 {
-      font-size: 1em;
+      font-size: max(1em, 1.1vw);
       color: $Gray;
     }
 
     h6 {
-      font-size: 1.5em;
+      font-size: max(1em, 1.5vw);
       width: 100%;
+      margin-top: 0.3em;
     }
   }
 }
@@ -54,19 +59,25 @@
   display: flex;
   flex-wrap: wrap;
   place-content: center;
+  margin: 2.5em 0.5em 1em;
 
   .transactions {
     margin: 0.5em 0.5em 0.3em;
-    padding: 1em 0;
+    padding: 1em 0em;
     width: clamp(5em, 100px, 100%);
-    font-size: 1em;
+    font-size: max(0.8em, 0.8vw);
     color: $DarkRed;
     border-top-left-radius: 0.5em;
     border-bottom-right-radius: 0.5em;
     cursor: pointer;
 
-    // border: 1px groove $DarkRed;
-    box-shadow: 2px 2px 5px $DarkRed;
+    box-shadow: 1px 1px 3px $Gray inset;
+    transition: 0.25s;
+
+    &:hover {
+      background: $LightGray;
+      box-shadow: 1px 1px 2px $Gray inset;
+    }
   }
 }
 
@@ -76,7 +87,7 @@
     color: $White;
     text-align: left;
     padding: 1em;
-    font-size: 1em;
+    font-size: max(1em, 1vw);
   }
 
   .trans-record {
@@ -85,16 +96,22 @@
     padding: 0.8em 1em;
     border-bottom: 1px solid $DarkRed;
     text-align: left;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      background-color: $LightGray;
+    }
   }
 
   .details {
     h4 {
       color: $Black;
-      font-size: 1em;
+      font-size: max(0.8em, 0.8vw);
     }
 
     p {
-      font-size: .7em;
+      font-size: max(0.7em, 0.8vw);
       margin-top: 0.3em;
       color: $Gray;
     }
@@ -103,5 +120,6 @@
   .price {
     color: $LightGreen;
     font-weight: 900;
+    font-size: max(0.7em, 0.9vw);
   }
 }

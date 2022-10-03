@@ -2,6 +2,7 @@
 
 .login-wrap{
     @extend .form-design;
+   
 }
 
 .sign-in-opt{
@@ -18,8 +19,8 @@ p{
 
     span{
         font-size: .8em;
-        color: $Black;
-        padding: .1em;
+        padding: .1em .2em;
+        color: $LightGray;
         cursor: pointer;
         transition: .5s;
         &:hover{

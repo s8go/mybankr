@@ -1,20 +1,31 @@
-import { useEffect, useState } from "react";
+import React,{ useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { userDetails } from "../../App";
 
 const Login = ({ validateUser }) => {
   const [loggedUser, setLoggedUser] = useState({});
   const [signedIn, setSignedIn] = useState(false);
-  const Navigate = useNavigate(); 
+  // const [typing, setTyping] = useState(false);
+  const Navigate = useNavigate();
+  const user = useContext(userDetails);
 
   /*
 This is the input onChange function to get input details
 */
 
-useEffect(()=>{
-setTimeout(()=>{
-  if(signedIn) Navigate("/my-account");
-}, 300)
-}, [signedIn])
+  useEffect(() => {
+    setLoggedUser({
+      username: localStorage.username,
+      password: localStorage.password,
+    });
+    setTimeout(() => {
+      if (signedIn && user) {
+        Navigate("/dashboard");
+      } else {
+        setSignedIn(false);
+      }
+    }, 300);
+  }, [signedIn]);
 
   function loginDetails(event) {
     setLoggedUser((curr) => {
@@ -22,27 +33,38 @@ setTimeout(()=>{
     });
   }
 
+  function submitForm() {
+    validateUser(loggedUser);
+    setSignedIn(true);
+
+    localStorage.username = loggedUser.username;
+    localStorage.password = loggedUser.password;
+  }
+
   return (
     <div className="login-wrap">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          validateUser(loggedUser);
-          setSignedIn(true)
+          submitForm();
         }}
       >
         <div className="input-div">
           <input
+            required
             type="text"
             placeholder="username"
             name="username"
             value={loggedUser.username || ""}
-            onChange={(e) => loginDetails(e.target)}
+            onChange={(e) => {
+              loginDetails(e.target);
+            }}
           />
         </div>
 
         <div className="input-div">
           <input
+            required
             type="password"
             placeholder="password"
             name="password"
@@ -54,23 +76,14 @@ setTimeout(()=>{
         <div className="input-div">
           <input type="submit" value={signedIn ? "Loading..." : "Log In"} />
         </div>
-        <div>
-
-
-          {/* <div className="sign-in-opt">
-          <div className="alternate">
-            <h4>or sign in with</h4>
-          </div>
-            <div className="google">Google</div>
-
-            <div className="facebook">Facebook</div>
-          </div> */}
-        </div>
+        <div></div>
       </form>
 
       <div>
         <p>
-          <span>Don't have an account? </span>
+          <span className="signup" onClick={() => Navigate("/signup")}>
+            Don't have an account?{" "}
+          </span>
           <span>Forgot password? </span>
           <span>Terms</span>
         </p>

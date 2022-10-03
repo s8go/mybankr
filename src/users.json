@@ -1,15 +1,34 @@
  [
   {
-    "fullName": "Segun",
+    "fullName": "Segoe",
     "username": "sg",
     "password": 12345,
-    "accountBalance": 2500
-  },
+    "accountBalance": 5000,
+    "email": "segun@gmail.com",
+    "phone": 0,
+   "transactions":[
+    {"from": "SEGOE",
+      "amount": 5000,
+      "type": "deposit",
+      "number": 4348475276363
+    }
+   ]
+  }
+  ,
   {
     "fullName": "Ogo-oluwa",
     "username": "og",
     "password": 12345,
-    "accountBalance": 500
+    "accountBalance": 5000,
+    "email": "ogo@gmail.com",
+    "phone": 0,
+    "transactions":[
+      {"from": "SEGOE",
+        "amount": 5000,
+        "type": "deposit",
+        "number": 629873587317
+      }
+     ]
 
   }
 ]

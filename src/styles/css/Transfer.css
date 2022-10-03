@@ -1,0 +1,173 @@
+.form-design, .signup-container, .transfer {
+  width: 100%;
+  height: 100vh;
+  padding: 2em 0;
+  margin: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #00006b;
+  padding-top: 5em;
+  padding-bottom: 3em;
+}
+
+.form-design form, .signup-container form, .transfer form {
+  background: white;
+  width: 95%;
+  max-width: 570px;
+  margin: auto;
+  padding: 1em;
+  border-top-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+  border: 3px solid #0000c8;
+}
+
+.form-design, .signup-container, .transfer {
+  width: 100%;
+  height: 100vh;
+  padding: 2em 0;
+  margin: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #00006b;
+  padding-top: 5em;
+  padding-bottom: 3em;
+}
+
+.form-design form, .signup-container form, .transfer form {
+  background: white;
+  width: 95%;
+  max-width: 570px;
+  margin: auto;
+  padding: 1em;
+  border-top-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+  border: 3px solid #0000c8;
+}
+
+.signup-container .error {
+  color: red;
+  font-size: .8em;
+}
+
+.input-div, .transfer div {
+  margin-top: 0.7em;
+  padding: 0.4em;
+}
+
+.input-div input, .transfer div input {
+  padding: 1em;
+  display: inline-block;
+  width: 100%;
+  font-size: 1em;
+  color: #010130;
+  border-top-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+  border: 1px solid #0000c8;
+  text-align: center;
+}
+
+.input-div input::-webkit-input-placeholder, .transfer div input::-webkit-input-placeholder {
+  font-size: .8em;
+  color: #9b9b9b;
+}
+
+.input-div input:-ms-input-placeholder, .transfer div input:-ms-input-placeholder {
+  font-size: .8em;
+  color: #9b9b9b;
+}
+
+.input-div input::-ms-input-placeholder, .transfer div input::-ms-input-placeholder {
+  font-size: .8em;
+  color: #9b9b9b;
+}
+
+.input-div input::placeholder, .transfer div input::placeholder {
+  font-size: .8em;
+  color: #9b9b9b;
+}
+
+.input-div input:focus, .transfer div input:focus {
+  border-color: #010130;
+  outline: none;
+}
+
+.input-div input[type="submit"], .transfer div input[type="submit"] {
+  padding: 0.5em;
+  font-size: 0.9em;
+  width: 120px;
+  background-color: white;
+  border: 1px solid #010130;
+  color: #010130;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.transfer {
+  background: rgba(0, 5, 45, 0.679);
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.transfer .cancel {
+  cursor: pointer;
+  color: #0000c8;
+}
+
+.transfer form {
+  background-color: #d1d1d1;
+  border: none;
+}
+
+.transfer div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.transfer div input {
+  background-color: #d1d1d1;
+}
+
+.transfer div label,
+.transfer div input {
+  display: block;
+  border: none;
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+.transfer div label:focus,
+.transfer div input:focus {
+  border: 1px solid #0000c8;
+}
+
+.transfer div label {
+  padding-left: 0.5em;
+  font-size: 1em;
+  color: #0000c8;
+  width: 100%;
+  max-width: 300px;
+}
+
+.transfer div input[type="submit"] {
+  text-align: center;
+}
+/*# sourceMappingURL=Transfer.css.map */

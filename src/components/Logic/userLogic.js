@@ -1,30 +1,25 @@
-/*
-This is the signUser function to register user
-*/
+// /*
+// This is the signUser function to register user
+// */
 
-export function signUser(users, newUser) {
-  users = [...users, {
-    ...newUser,
-    fullName: newUser.firstName + newUser.lastName,
-    accountBalance: "20.00",
-    username: newUser.firstName[0] + newUser.lastName[0]
-  }];
-  return users;
-}
+// export function signUser() {
+//  console.log()
+// }
 
-/*
-This is the loginUser function to get current user's details
-*/
+// /*
+// This is the loginUser function to get current user's details
+// */
 
-export function loginUser(users, loggedUser) {
-  
-  return users.filter((user) => {
-    if (
-      user.username === loggedUser.username &&
-      +user.password === +loggedUser.password
-      ) {
-        console.log(user)
-        return user;
-      }
-  })[0]
-}
+// export function validateUser(loggedUser) {
+//   setCurrentUser((c) => {
+//     return users.filter((user) => {
+//       if (
+//         user.password === +loggedUser.password &&
+//         user.username.toLowerCase() ===
+//           loggedUser.username.toLocaleLowerCase()
+//       ) {
+//         return user;
+//       }
+//     })[0];
+//   });
+// }

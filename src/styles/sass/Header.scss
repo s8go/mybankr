@@ -1,0 +1,194 @@
+@import "./Variables.scss";
+
+header {
+  display: flex;
+  background-color: $Black;
+  color: $White;
+  justify-content: space-between;
+  align-items: baseline;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  width: 100%;
+  padding-inline: 2em;
+  height: max(3.5em, 5vw);
+}
+
+nav {
+  padding: 1em;
+  width: 100%;
+  margin-block: auto;
+  transition: 0.5s;
+
+  .bigScreen {
+    display: none;
+  }
+
+  @include Tablet($Tablet) {
+    padding: 0.4em;
+    display: flex;
+    align-items: center;
+
+    .hamburger {
+      display: none;
+    }
+
+    .dropdown {
+      display: none;
+    }
+
+    .bigScreen {
+      display: block;
+      text-align: left;
+      padding-left: 1em;
+      margin-block: auto;
+
+      li {
+        list-style: none;
+        display: inline-block;
+        margin-right: 3em;
+
+        p {
+          font-size: 0.9em;
+          color: $LightGray;
+          cursor: pointer;
+          transition: 0.2s;
+
+          &:hover {
+            color: $Gray;
+          }
+        }
+      }
+    }
+  }
+}
+
+nav > div {
+  width: 10%;
+}
+
+.menu {
+  width: 20px;
+  height: 20px;
+}
+
+.hamburger {
+  width: 20px;
+  height: 1px;
+  background-color: $White;
+  position: relative;
+  transition: 0.5s;
+
+  &:before {
+    content: "";
+    width: 25px;
+    height: 1px;
+    background-color: $White;
+    position: absolute;
+    left: 0;
+    transform: translateY(0.4em);
+  }
+
+  &:after {
+    content: "";
+    width: 20px;
+    height: 1px;
+    background-color: $White;
+    position: absolute;
+    left: 0;
+    transform: translateY(0.8em);
+  }
+}
+
+.menu-open {
+  .hamburger {
+    transform: rotate(115deg);
+
+    &:before {
+      content: "";
+      width: 0;
+    }
+
+    &:after {
+      transform: rotate(-50deg);
+    }
+  }
+}
+
+.logo {
+  font-size: max(1.6em, 2vw);
+  letter-spacing: 0.2em;
+  font-weight: 900;
+  text-shadow: 2px 2px $Red, -2px -2px $Red;
+  cursor: pointer;
+  color: $LightGray;
+  transition: 0.2s;
+
+  &:hover {
+    color: $Gray;
+  }
+}
+
+ul {
+  margin-top: 0.5em;
+  text-align: center;
+}
+
+.dropdown {
+  animation-name: jebo;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+  min-height: 250px;
+  width: 100%;
+  margin-top: 5em;
+  
+  background-color: red;
+  li {
+    list-style-type: none;
+    width: 100%;
+    padding: 0.8em 1em;
+    
+    p {
+      cursor: pointer;
+      font-size: max(0.8em, 1.3vw);
+      color: $LightGray;
+      position: relative;
+      width: 50%;
+      text-align: left;
+
+      &:hover {
+        color: $Gray;
+
+        &::before {
+          width: max(100px, 100vw);
+          transform: translateX(0%);
+          background-color: $Gray;
+        }
+      }
+
+      &::before {
+        content: "";
+        width: 70vw;
+        height: 3px;
+        background-color: $LightGray;
+        position: absolute;
+        bottom: 0;
+        transform: translateX(50%);
+        transition: 0.2s;
+      }
+    }
+  }
+}
+
+@keyframes jebo {
+  from {
+    width: 100%;
+    height: 0vh;
+  }
+
+  to {
+    width: 85%;
+    height: 100vh;
+  }
+}
