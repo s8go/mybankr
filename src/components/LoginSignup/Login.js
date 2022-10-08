@@ -7,25 +7,26 @@ const Login = ({ validateUser }) => {
   const [signedIn, setSignedIn] = useState(false);
   // const [typing, setTyping] = useState(false);
   const Navigate = useNavigate();
-  const user = useContext(userDetails);
+  const {currentUser} = useContext(userDetails);
 
   /*
 This is the input onChange function to get input details
-*/
+// */
 
   useEffect(() => {
     setLoggedUser({
       username: localStorage.username,
       password: localStorage.password,
     });
-    setTimeout(() => {
-      if (signedIn && user) {
+
+      if (signedIn) {
         Navigate("/dashboard");
       } else {
         setSignedIn(false);
       }
-    }, 300);
+  
   }, [signedIn]);
+
 
   function loginDetails(event) {
     setLoggedUser((curr) => {
@@ -39,6 +40,7 @@ This is the input onChange function to get input details
 
     localStorage.username = loggedUser.username;
     localStorage.password = loggedUser.password;
+
   }
 
   return (
@@ -81,7 +83,10 @@ This is the input onChange function to get input details
 
       <div>
         <p>
-          <span className="signup" onClick={() => Navigate("/signup")}>
+          <span className="signup" onClick={() => {
+            Navigate("/signup");
+            console.log("Signup")
+          }}>
             Don't have an account?{" "}
           </span>
           <span>Forgot password? </span>

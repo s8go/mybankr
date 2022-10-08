@@ -3,6 +3,8 @@ import React, {useState} from 'react'
 const Transfer = ({completeTransaction, cancelTransaction, transactionType}) => {
     const [transactionDetails, setTransactionDetails] = useState({});
 
+    const [transactionProgress, setProgress] = useState(transactionType);
+
     function handleInput(e){
         const name = e.name;
         const value = e.value;
@@ -21,7 +23,8 @@ const Transfer = ({completeTransaction, cancelTransaction, transactionType}) => 
         
         <form onSubmit={(e)=>{
             e.preventDefault();
-            completeTransaction(transactionDetails, transactionType)
+            completeTransaction(transactionDetails, transactionType);
+            setProgress('...')
         }}>
             <div>
             <p className='cancel' onClick={cancelTransaction}>X</p>
@@ -51,7 +54,7 @@ const Transfer = ({completeTransaction, cancelTransaction, transactionType}) => 
             </>
 }
            <div>
-            <input type="submit" value={transactionType} />
+            {transactionProgress === "..." ? <input type="submit" value={transactionProgress} disabled/> : <input type="submit" value={transactionProgress}/>}
            </div>
 
         </form>

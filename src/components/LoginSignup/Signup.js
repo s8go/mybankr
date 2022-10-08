@@ -1,37 +1,40 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { userDetails } from "../../App";
 
 const Signup = ({ registerUser }) => {
   const [newUser, setNewUser] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
+  const {currentUser} = useContext(userDetails)
   const Navigate = useNavigate();
 
   /*
 This is the input onChange function to get input details
 */
 
-  // useEffect(()=>{
-  //   setTimeout(()=>{
-  //     setErrorMessage("")
-  //   }, 300)
-  // }, [errorMessage])
-
+useEffect(()=>{
+    if(currentUser !== null){
+      localStorage.username = newUser.email;
+      localStorage.password = newUser.password;
+      Navigate("/login")
+    }
+  }, [currentUser])
+  
   function inputValues(e) {
     setNewUser((curr) => {
       return { ...curr, [e.name]: e.value };
     });
   }
-
+  
   function formValidation() {
     setTimeout(() => {
       setErrorMessage("");
     }, 600);
-
+    
     if (isNaN(newUser.phone)) {
       setErrorMessage("Invalid phone number");
     } else {
       registerUser(newUser);
-      Navigate("/login");
     }
   }
 
@@ -111,13 +114,13 @@ This is the input onChange function to get input details
         <p className="error">{errorMessage}</p>
 
         <div className="input-div">
-          <input type="submit" value="submit" />
+          <input type="submit" value={currentUser === null ? "Submit" : "Loading"} />
         </div>
       </form>
 
       <div>
         <div className="sign-in-opt">
-          <div className="google">Google</div>
+          <p className="google">Google</p>
         </div>
         <p>
           <span className="signup" onClick={() => Navigate("/login")}>

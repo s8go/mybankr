@@ -3,7 +3,10 @@ import React from "react";
 
 
 const AccountDetails = ({ initTransaction, completeTransaction , currentUser}) => {
-// console.log(currentUser)
+  
+  
+ 
+
   return (
     <>
       <div className="my-account">
@@ -52,9 +55,9 @@ const AccountDetails = ({ initTransaction, completeTransaction , currentUser}) =
       <div className="recent-transaction">
         <h5>Recent Transactions</h5>
 
-        {currentUser.transactions.map((trans, i) => {
+        {currentUser.transactions !== undefined && currentUser.transactions.map((trans, i) => {
           return (
-            <div className="trans-record" key={i}>
+            <div className="trans-record" key={i * Math.floor(Math.random() * 100000)}>
               <div className="details">
                 <h4>{trans.from || trans.to}</h4>
 

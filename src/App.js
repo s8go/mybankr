@@ -1,81 +1,119 @@
 import React, { createContext, useEffect, useState } from "react";
+
+//Firebase
+import { app, database } from "./firebaseConfig";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  onSnapshot,
+} from "firebase/firestore";
+
+// Routers
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+//Components
 import MyAccount from "./components/Account/MyAccount";
 import Login from "./components/LoginSignup/Login";
 import Signup from "./components/LoginSignup/Signup";
-import allUsers from "./users.json";
-// import { signUser, validateUser } from "./components/Logic/userLogic";
+
 import Transfer from "./components/Logic/Transfer";
-import NavBar  from "./components/mainpage/NavBar";
+import NavBar from "./components/mainpage/NavBar";
+import { async } from "@firebase/util";
 
 export const userDetails = createContext();
 
 function App() {
-  const [currentUser, setCurrentUser] = useState({noUser: true});
-  const [users, setUsers] = useState(allUsers);
+  const [currentUser, setCurrentUser] = useState(null);
   const [transactionType, setTransactionType] = useState(false);
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+  const myCollection = collection(database, "users");
 
-  
-  
-  //UseEffect to update current User's account balance whenever the users
+  //Get the snapshots after every transactions
+
   useEffect(() => {
-    setCurrentUser((c) => {
-      return users.filter((user) => {
-        if (user.username === currentUser.username) {
-          return user;
-        }
-      })[0];
+    onSnapshot(myCollection, (data) => {
+      if (!currentUser) return;
+      data.docs.filter((item) => {
+        if (currentUser.email === item.data().email)
+          setCurrentUser({ ...item.data(), id: item.id });
+      });
     });
-  }, [users]);
-  
+  }, [transactionType]);
+
+  //SignUp with google
+
   /* 
   This is the login code to set the current user : it calls a loginUser function
   which is used to get the user details from the database
   */
 
-  function validateUser(loggedUser) {
-  
-    setCurrentUser((c) => {
-      return users.filter((user) => {
-        if (
-          user.password === +loggedUser.password &&
-          user.username.toLowerCase() ===
-            loggedUser.username.toLocaleLowerCase()
-        ) {
-          return user;
-        }
-      })[0];
+  async function validateUser(loggedUser) {
+    await signInWithEmailAndPassword(
+      auth,
+      loggedUser.username,
+      loggedUser.password
+    ).catch((err) => {
+      alert(err.message);
     });
+
+    const fireUsers = await getDocs(myCollection).then((response) => {
+      return response.docs.map((item) => {
+        return { ...item.data(), id: item.id };
+      });
+    });
+
+    let fireUser = await fireUsers.filter((user) => {
+      if (user.email === loggedUser.username) {
+        return user;
+      }
+    });
+    setCurrentUser(fireUser[0]);
+    // signInWithPopup(auth, provider)
+    //   .then((res) => {
+    //     console.log(res.user);
+    //   })
+    //   .catch((err) => {
+    //     alert(err.message);
+    //   });
   }
-  
+
   /* 
   This is the signup code to register a user : it calls a signUser function
   which is used to add the user details to the database
   */
 
-  function registerUser(newUser) {
-    users.forEach((user) => {
-      if (
-        newUser.username.toLowerCase() !== user.username.toLocaleLowerCase() &&
-        user.email !== newUser.email &&
-        user.phone !== newUser.phone
-      ) {
-        setUsers([
-          ...users,
-          {
-            fullName: newUser.fullName,
-            accountBalance: 5000,
-            username:newUser.username,
-            email: newUser.email,
-            phone: +newUser.phone,
-            password: Number(newUser.password),
-            transactions: [{ from: "Segoe", amount: 5000, type: "deposit" }],
-          },
-        ]);
-      } else {
-        console.log("User Already Exists");
-      }
-    });
+  async function registerUser(newUser) {
+    await createUserWithEmailAndPassword(auth, newUser.email, newUser.password)
+      .then((response) => {
+        console.log("ACCT CREATED");
+        setCurrentUser(newUser);
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+
+    await addDoc(myCollection, {
+      fullName: newUser.fullName,
+      username: newUser.username,
+      password: newUser.password,
+      accountBalance: 5000,
+      email: newUser.email,
+      phone: newUser.phone,
+      transactions: [
+        { from: "Bankr", amount: 5000, type: "deposit", number: newUser.username.slice(0, 2) + 1 },
+      ],
+    }).catch((err) => alert(err.message));
   }
 
   //Initiate transaction, TransType is the transaction type
@@ -92,111 +130,104 @@ function App() {
 
   //Validate transaction, depending on the transaction type
 
+  //Setting the update callback function
+
+  function updateDataFromServer(
+    userToUpdate,
+    id,
+    sender,
+    transactions,
+    transNumber,
+    transactionType = "deposit"
+  ) {
+    const docToUpdate = doc(database, "users", id);
+
+    updateDoc(docToUpdate, {
+      accountBalance:
+        Number(userToUpdate.accountBalance) + Number(transactions.amount),
+      transactions: [
+        {
+          from: sender,
+          amount: transactions.amount,
+          type: transactionType,
+          number: transNumber,
+        },
+        ...userToUpdate.transactions,
+      ],
+    })
+      .then((res) => {
+        console.log("DATA Updated");
+        cancelTransaction();
+      })
+      .catch((err) => {
+        console.log("INVALID TRANSACTION");
+      });
+  }
 
   function completeTransaction(transactions, transType) {
+    let transactionRef =
+      currentUser.id.slice(0, 5) + "" + Math.floor(Math.random() * 100000);
+
     if (transType === "deposit" || transType === "loan") {
-      setUsers(
-        users.map((user) => {
-          if (
-            user.username.toLocaleLowerCase() ===
-            currentUser.username.toLocaleLowerCase()
-          ) {
-            return {
-              ...user,
-              accountBalance:
-                Number(user.accountBalance) + Number(transactions.amount),
-              transactions: [
-                ...user.transactions,
-                {
-                  from: "SEGOE",
-                  amount: transactions.amount,
-                  type: "deposit",
-                  number: 419,
-                },
-              ],
-            };
-          } else {
-            return user;
-          }
-        })
+      updateDataFromServer(
+        currentUser,
+        currentUser.id,
+        "Bankr",
+        transactions,
+        transactionRef
       );
     } else if (transType === "transfer") {
-      setUsers(
-        users.map((user) => {
-          if (
-            user.username.toLocaleLowerCase() ===
-              transactions.to.toLocaleLowerCase() &&
-            transactions.to.toLocaleLowerCase() !==
-              currentUser.username.toLowerCase()
-          ) {
-            return {
-              ...user,
+      getDocs(myCollection).then((res) => {
+        res.docs.map((item) => {
+          if (item.data().username === transactions.to) {
+            updateDataFromServer(
+              item.data(),
+              item.id,
+              currentUser.username,
+              transactions,
+              transactionRef,
+              "deposit"
+            );
+
+            const docToUpdate = doc(database, "users", currentUser.id);
+
+            updateDoc(docToUpdate, {
               accountBalance:
-                Number(user.accountBalance) + Number(transactions.amount),
+                Number(currentUser.accountBalance) - Number(transactions.amount),
               transactions: [
-                ...user.transactions,
                 {
-                  from: currentUser.username,
+                  to: item.data().username,
                   amount: transactions.amount,
-                  type: "deposit",
-                  number: 419,
+                  type: transactionType,
+                  number: transactionRef,
                 },
+                ...currentUser.transactions,
               ],
-            };
-          } else if (
-            user.username.toLocaleLowerCase() ===
-              currentUser.username.toLowerCase() &&
-            transactions.to.toLocaleLowerCase() !==
-              currentUser.username.toLowerCase()
-          ) {
-            return {
-              ...user,
-              accountBalance:
-                Number(user.accountBalance) - Number(transactions.amount),
-              transactions: [
-                ...user.transactions,
-                {
-                  to: transactions.to,
-                  amount: transactions.amount,
-                  type: "transfer",
-                  number: 419,
-                },
-              ],
-            };
-          } else {
-            return user;
+            })
           }
-        })
-      );
-
-      if (
-        transactions.to.toLocaleLowerCase() ===
-        currentUser.username.toLowerCase()
-      ) {
-        alert("Invalid Transaction...");
-      }
+        });
+      });
     }
-
-    cancelTransaction();
   }
 
   return (
     <div className="App">
-      <userDetails.Provider value={{
-        currentUser: currentUser,
-        validateUser: validateUser
-      }}>
+      <userDetails.Provider
+        value={{
+          currentUser: currentUser,
+          validateUser: validateUser,
+        }}
+      >
         <BrowserRouter>
+          <NavBar />
+          {transactionType !== false && (
+            <Transfer
+              completeTransaction={completeTransaction}
+              cancelTransaction={cancelTransaction}
+              transactionType={transactionType}
+            />
+          )}
 
-      <NavBar/>
-    
-      {transactionType !== false && (
-        <Transfer
-        completeTransaction={completeTransaction}
-        cancelTransaction={cancelTransaction}
-        transactionType={transactionType}
-        />
-      )}
           <Routes>
             {/* <Route path="/" element={<MainPage />}></Route> */}
             <Route
@@ -227,7 +258,6 @@ function App() {
                   cancelTransaction={cancelTransaction}
                 />
               }
-
             ></Route>
           </Routes>
         </BrowserRouter>
@@ -235,7 +265,7 @@ function App() {
 
       {/* <userDetails.Provider value={currentUser}>
         <Signup registerUser={registerUser} />
-        <MyAccount />
+        {!currentUser.noUser && <MyAccount />}
         <Login validateUser={validateUser} />
       </userDetails.Provider> */}
     </div>
