@@ -1,13 +1,10 @@
-import React,{ useContext, useEffect, useState } from "react";
+import React,{ useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { userDetails } from "../../App";
 
 const Login = ({ validateUser }) => {
   const [loggedUser, setLoggedUser] = useState({});
   const [signedIn, setSignedIn] = useState(false);
-  // const [typing, setTyping] = useState(false);
   const Navigate = useNavigate();
-  const {currentUser} = useContext(userDetails);
 
   /*
 This is the input onChange function to get input details
@@ -15,7 +12,7 @@ This is the input onChange function to get input details
 
   useEffect(() => {
     setLoggedUser({
-      username: localStorage.username,
+      email: localStorage.email,
       password: localStorage.password,
     });
 
@@ -38,7 +35,7 @@ This is the input onChange function to get input details
     validateUser(loggedUser);
     setSignedIn(true);
 
-    localStorage.username = loggedUser.username;
+    localStorage.email = loggedUser.email;
     localStorage.password = loggedUser.password;
 
   }
@@ -55,9 +52,9 @@ This is the input onChange function to get input details
           <input
             required
             type="text"
-            placeholder="username"
-            name="username"
-            value={loggedUser.username || ""}
+            placeholder="email"
+            name="email"
+            value={loggedUser.email || ""}
             onChange={(e) => {
               loginDetails(e.target);
             }}

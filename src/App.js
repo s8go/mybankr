@@ -5,9 +5,7 @@ import { app, database } from "./firebaseConfig";
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
+  signInWithEmailAndPassword
 } from "firebase/auth";
 import {
   collection,
@@ -28,7 +26,6 @@ import Signup from "./components/LoginSignup/Signup";
 
 import Transfer from "./components/Logic/Transfer";
 import NavBar from "./components/mainpage/NavBar";
-import { async } from "@firebase/util";
 
 export const userDetails = createContext();
 
@@ -36,20 +33,23 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [transactionType, setTransactionType] = useState(false);
   const auth = getAuth();
-  const provider = new GoogleAuthProvider();
   const myCollection = collection(database, "users");
-
+  
+  // const provider = new GoogleAuthProvider();
   //Get the snapshots after every transactions
 
   useEffect(() => {
     onSnapshot(myCollection, (data) => {
       if (!currentUser) return;
       data.docs.filter((item) => {
-        if (currentUser.email === item.data().email)
+        if (currentUser.email.toLowerCase() === item.data().email.toLowerCase())
           setCurrentUser({ ...item.data(), id: item.id });
+          return item;
       });
     });
   }, [transactionType]);
+
+  console.log(app)
 
   //SignUp with google
 
@@ -61,7 +61,7 @@ function App() {
   async function validateUser(loggedUser) {
     await signInWithEmailAndPassword(
       auth,
-      loggedUser.username,
+      loggedUser.email,
       loggedUser.password
     ).catch((err) => {
       alert(err.message);
@@ -74,9 +74,10 @@ function App() {
     });
 
     let fireUser = await fireUsers.filter((user) => {
-      if (user.email === loggedUser.username) {
+      if (user.email.toLowerCase() === loggedUser.email.toLowerCase()) {
         return user;
       }
+      return true;
     });
     setCurrentUser(fireUser[0]);
     // signInWithPopup(auth, provider)
@@ -179,7 +180,7 @@ function App() {
     } else if (transType === "transfer") {
       getDocs(myCollection).then((res) => {
         res.docs.map((item) => {
-          if (item.data().username === transactions.to) {
+          if (item.data().username.toLowerCase() === transactions.to.toLowerCase()) {
             updateDataFromServer(
               item.data(),
               item.id,
@@ -205,9 +206,12 @@ function App() {
               ],
             })
           }
+          return item;
         });
       });
     }
+
+
   }
 
   return (
@@ -251,13 +255,7 @@ function App() {
             ></Route>
             <Route
               path="*"
-              element={
-                <MyAccount
-                  initTransaction={initTransaction}
-                  completeTransaction={completeTransaction}
-                  cancelTransaction={cancelTransaction}
-                />
-              }
+              element={<Login validateUser={validateUser} />}
             ></Route>
           </Routes>
         </BrowserRouter>

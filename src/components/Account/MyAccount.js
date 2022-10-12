@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import AccountDetails from "./AccountDetails";
 import { userDetails } from "../../App";
-import { useNavigate } from "react-router-dom";
 
 const MyAccount = ({ initTransaction, completeTransaction, validateUser }) => {
   const { currentUser: user } = useContext(userDetails);
@@ -9,8 +8,7 @@ const MyAccount = ({ initTransaction, completeTransaction, validateUser }) => {
   const [userPresent, setUserPresent] = useState(false);
 
   useEffect(() => {
-    if (user === null) {
-        console.log(localStorage, validateUser);
+    if (user === null && validateUser !== undefined) {
         validateUser(localStorage);
     } else {
       setCurrentUser({ ...user });
