@@ -1,4 +1,5 @@
 import React from "react";
+import Transactions from "./Transactions";
 // import {userDetails} from "../../App"
 
 
@@ -22,40 +23,13 @@ const AccountDetails = ({ initTransaction, completeTransaction , currentUser}) =
           </div>
         </div>
 
-        <div className="transaction-list">
-          <div
-            className="transactions deposit"
-            onClick={() => initTransaction("deposit")}
-          >
-            deposit
-          </div>
-
-          <div className="transactions withdraw">withdraw</div>
-
-          <div
-            className="transactions"
-            onClick={() => initTransaction("transfer")}
-          >
-            transfer
-          </div>
-
-          <div className="transactions saving">saving</div>
-
-          <div
-            className="transactions loan"
-            onClick={() => initTransaction("loan")}
-          >
-            loan
-          </div>
-
-          <div className="transactions Pay Bills">Pay Bills</div>
-        </div>
       </div>
 
       <div className="recent-transaction">
         <h5>Recent Transactions</h5>
 
         {currentUser.transactions !== undefined && currentUser.transactions.map((trans, i) => {
+         if(i + 1<= 5){
           return (
             <div className="trans-record" key={i * Math.floor(Math.random() * 100000)}>
               <div className="details">
@@ -69,6 +43,7 @@ const AccountDetails = ({ initTransaction, completeTransaction , currentUser}) =
               </div>
             </div>
           );
+         }
         })}
 
         {

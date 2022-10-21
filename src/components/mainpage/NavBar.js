@@ -49,7 +49,7 @@ export default function NavBar(){
         {openMenu && navItems}
       </ul>
     </nav>
-    <p className="logo" onClick={()=>Navigate("/home")}>BankR</p>
+    <p className="logo" onClick={()=>Navigate("/login")}>BankR</p>
   </header>
 
   )

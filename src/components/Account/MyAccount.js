@@ -1,15 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import AccountDetails from "./AccountDetails";
 import { userDetails } from "../../App";
+import Transactions from "./Transactions";
 
-const MyAccount = ({ initTransaction, completeTransaction, validateUser }) => {
-  const { currentUser: user } = useContext(userDetails);
+const MyAccount = ({ initTransaction, completeTransaction, validateUser, display }) => {
+  const { currentUser: user, error } = useContext(userDetails);
   const [currentUser, setCurrentUser] = useState();
   const [userPresent, setUserPresent] = useState(false);
+  
+ 
 
   useEffect(() => {
     if (user === null && validateUser !== undefined) {
-        validateUser(localStorage);
+      validateUser(localStorage);
     } else {
       setCurrentUser({ ...user });
       setUserPresent(true);
@@ -18,14 +21,21 @@ const MyAccount = ({ initTransaction, completeTransaction, validateUser }) => {
 
   return (
     <>
-      {userPresent ? (
+      {userPresent && display === "dashboard" && (
         <AccountDetails
-          initTransaction={initTransaction}
           completeTransaction={completeTransaction}
           currentUser={currentUser}
         />
+      )}
+
+      {
+        userPresent && display === "transaction" && <Transactions initTransaction={initTransaction}/>
+      }
+
+      {error === true ? (
+        <div></div>
       ) : (
-        <div>Loading...</div>
+        <div className="loading">{userPresent ? "" : <h1>Loading....</h1>}</div>
       )}
     </>
   );

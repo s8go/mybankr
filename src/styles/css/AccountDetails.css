@@ -1,4 +1,4 @@
-.form-design {
+/* .form-design {
   width: 100%;
   height: 100vh;
   padding: 2em 0;
@@ -24,12 +24,14 @@
   border-top-left-radius: 1em;
   border-bottom-right-radius: 1em;
   border: 3px solid #0000c8;
-}
+} */
 
 .my-account {
   background-color: white;
   padding: 1em;
   padding-top: 5em;
+  width: 100%;
+  min-width: 250px;
 }
 
 .account-details {
@@ -48,21 +50,21 @@
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   width: 100%;
 }
 
 .account-details .account-name h3 {
-  font-size: 0.8vw;
+  font-size: max(1em, 1.6vw);
 }
 
 .account-details .account-name p {
   color: #9b9b9b;
-  font-size: 0.57vw;
+  font-size: max(1em, 0.7vw);
   text-align: right;
 }
 
@@ -73,49 +75,60 @@
   background: #00006b;
   border-bottom-right-radius: 1em;
   border-top-left-radius: 1em;
+  text-align: center;
 }
 
 .account-details .account-balance h3 {
-  font-size: 1em;
+  font-size: max(1.3em, 1.2vw);
   color: #9b9b9b;
 }
 
 .account-details .account-balance h6 {
-  font-size: 1em;
+  font-size: max(1em, 1.5vw);
   width: 100%;
   margin-top: 0.3em;
 }
 
 .transaction-list {
-  height: 100%;
+  height: 500px;
+  min-width: 270px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
   place-content: center;
-  margin: 2.5em 0.5em 1em;
+  margin: 3em 0.5em 1em;
 }
 
 .transaction-list .transactions {
+  width: 100%;
+  max-width: 200px;
+  text-align: center;
   margin: 0.5em 0.5em 0.3em;
-  padding: 1em 0em;
-  width: 100px;
-  font-size: 0.88vw;
-  color: #00006b;
+  padding: 1em 1em;
+  font-size: max(1em, 1vw);
+  background-color: #00006b;
+  color: white;
   border-top-left-radius: 0.5em;
   border-bottom-right-radius: 0.5em;
   cursor: pointer;
   -webkit-box-shadow: 1px 1px 3px #9b9b9b inset;
-          box-shadow: 1px 1px 3px #9b9b9b inset;
+  box-shadow: 1px 1px 3px #9b9b9b inset;
   -webkit-transition: 0.25s;
   transition: 0.25s;
 }
 
 .transaction-list .transactions:hover {
-  background: #d1d1d1;
+  background-color: #0000c8;
   -webkit-box-shadow: 1px 1px 2px #9b9b9b inset;
-          box-shadow: 1px 1px 2px #9b9b9b inset;
+  box-shadow: 1px 1px 2px #9b9b9b inset;
+}
+
+.recent-transaction {
+  width: 100%;
+  min-width: 250px;
+  margin-inline: auto;
 }
 
 .recent-transaction h5 {
@@ -123,7 +136,7 @@
   color: white;
   text-align: left;
   padding: 1em;
-  font-size: 1em;
+  font-size: max(1em, 1.5vw);
 }
 
 .recent-transaction .trans-record {
@@ -131,14 +144,15 @@
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
   padding: 0.8em 1em;
   border-bottom: 1px solid #00006b;
   text-align: left;
   cursor: pointer;
   -webkit-transition: 0.2s;
   transition: 0.2s;
+  padding-block: 0;
 }
 
 .recent-transaction .trans-record:hover {
@@ -147,11 +161,12 @@
 
 .recent-transaction .details h4 {
   color: #010130;
-  font-size: 0.88vw;
+  font-size: max(1em, 1.5vw);
+  margin-bottom: -0.3em;
 }
 
 .recent-transaction .details p {
-  font-size: 0.78vw;
+  font-size: max(1em, 1.2vw);
   margin-top: 0.3em;
   color: #9b9b9b;
 }
@@ -159,6 +174,65 @@
 .recent-transaction .price {
   color: #5ced5c;
   font-weight: 900;
-  font-size: 0.79vw;
+  font-size: max(1em, 1.2vw);
 }
+
+.loading {
+  width: 80vw;
+  height: 50vh;
+  min-height: 80px;
+  margin: auto;
+  margin-top: 20%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading h1 {
+  padding: 1em;
+  border-radius: 5em;
+  font-size:  max(1em, 1.2vw);
+  border-top: 2px solid blue;
+  border-bottom: 2px solid green;
+  border-left: 2px solid red;
+  border-right: 2px solid yellow;
+  position: relative;
+  animation-name: load;
+  animation-duration: .7s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes load {
+  0% {
+    border-top: 2px solid red;
+    border-bottom: 2px solid yellow;
+    border-left: 2px solid green;
+    border-right: 2px solid blue;
+  }
+
+  25% {
+    border-top: 2px solid green;
+    border-bottom: 2px solid blue;
+    border-left: 2px solid yellow;
+    border-right: 2px solid red;
+  }
+
+  50% {
+    border-top: 2px solid yellow;
+    border-bottom: 2px solid red;
+    border-left: 2px solid blue;
+    border-right: 2px solid green;
+  }
+
+  
+
+  75%{
+    border-top: 2px solid blue;
+    border-bottom: 2px solid green;
+    border-left: 2px solid red;
+    border-right: 2px solid yellow;
+  }
+}
+
 /*# sourceMappingURL=AccountDetails.css.map */

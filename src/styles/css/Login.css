@@ -1,6 +1,7 @@
 .form-design, .login-wrap {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
+  min-height: 600px;
   padding: 2em 0;
   margin: auto;
   display: -webkit-box;
@@ -50,4 +51,9 @@ p span {
 p span:hover {
   color: #9b9b9b;
 }
+
+.alternate {
+  text-align: center;
+}
+
 /*# sourceMappingURL=Login.css.map */

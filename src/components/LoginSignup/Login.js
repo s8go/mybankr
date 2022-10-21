@@ -79,15 +79,20 @@ This is the input onChange function to get input details
       </form>
 
       <div>
-        <p>
+      <div className="sign-in-opt">
+          <p className="google alternate">
+            Google
+          </p>
+        </div>
+        
+        <p className="alternate">
+          <span>Don't have an account? </span>
           <span className="signup" onClick={() => {
             Navigate("/signup");
             console.log("Signup")
           }}>
-            Don't have an account?{" "}
+            Create account here{" "}
           </span>
-          <span>Forgot password? </span>
-          <span>Terms</span>
         </p>
       </div>
     </div>

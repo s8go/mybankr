@@ -5,7 +5,7 @@ import { app, database } from "./firebaseConfig";
 import {
   getAuth,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import {
   collection,
@@ -26,15 +26,18 @@ import Signup from "./components/LoginSignup/Signup";
 
 import Transfer from "./components/Logic/Transfer";
 import NavBar from "./components/mainpage/NavBar";
+import Transactions from "./components/Account/Transactions";
 
 export const userDetails = createContext();
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [transactionType, setTransactionType] = useState(false);
+  const [error, setError] = useState(false);
+  const [display, setDisplay] = useState("dashboard")
   const auth = getAuth();
   const myCollection = collection(database, "users");
-  
+
   // const provider = new GoogleAuthProvider();
   //Get the snapshots after every transactions
 
@@ -42,14 +45,18 @@ function App() {
     onSnapshot(myCollection, (data) => {
       if (!currentUser) return;
       data.docs.filter((item) => {
-        if (currentUser.email.toLowerCase() === item.data().email.toLowerCase())
+        let email = String(item.data().email).toLowerCase();
+
+        if (currentUser.email.toLowerCase() === email) {
           setCurrentUser({ ...item.data(), id: item.id });
-          return item;
+        }
+
+        return item;
       });
     });
   }, [transactionType]);
 
-  console.log(app)
+  // console.log(currentUser);
 
   //SignUp with google
 
@@ -58,8 +65,8 @@ function App() {
   which is used to get the user details from the database
   */
 
-  async function validateUser(loggedUser) {
-    await signInWithEmailAndPassword(
+ async function validateUser(loggedUser) {
+   await signInWithEmailAndPassword(
       auth,
       loggedUser.email,
       loggedUser.password
@@ -67,19 +74,38 @@ function App() {
       alert(err.message);
     });
 
-    const fireUsers = await getDocs(myCollection).then((response) => {
-      return response.docs.map((item) => {
-        return { ...item.data(), id: item.id };
+    await getDocs(myCollection)
+      .then((response) => {
+        return response.docs.map((item) => {
+          return { ...item.data(), id: item.id };
+        });
+      })
+      .then((data) => {
+        data.filter((user) => {
+          let email = String(user.email).toLowerCase();
+          if (
+            email === loggedUser.email.toLowerCase() &&
+            user.password === loggedUser.password
+          )
+            setCurrentUser(user);
+          // else if (
+          //   email !== loggedUser.email &&
+          //   user.password !== loggedUser.password
+          // )
+          //   console.log("User Not Found!");
+          // else if (
+          //   email === loggedUser.email &&
+          //   user.password !== loggedUser.password
+          // )
+          //   console.log("Wrong Password");
+          // return null;
+        });
+      })
+      .catch((err) => {
+        setError(true);
+        console.log(err.message);
       });
-    });
 
-    let fireUser = await fireUsers.filter((user) => {
-      if (user.email.toLowerCase() === loggedUser.email.toLowerCase()) {
-        return user;
-      }
-      return true;
-    });
-    setCurrentUser(fireUser[0]);
     // signInWithPopup(auth, provider)
     //   .then((res) => {
     //     console.log(res.user);
@@ -112,7 +138,12 @@ function App() {
       email: newUser.email,
       phone: newUser.phone,
       transactions: [
-        { from: "Bankr", amount: 5000, type: "deposit", number: newUser.username.slice(0, 2) + 1 },
+        {
+          from: "Bankr",
+          amount: 5000,
+          type: "deposit",
+          number: newUser.username.slice(0, 2) + 1,
+        },
       ],
     }).catch((err) => alert(err.message));
   }
@@ -157,7 +188,6 @@ function App() {
       ],
     })
       .then((res) => {
-        console.log("DATA Updated");
         cancelTransaction();
       })
       .catch((err) => {
@@ -180,7 +210,9 @@ function App() {
     } else if (transType === "transfer") {
       getDocs(myCollection).then((res) => {
         res.docs.map((item) => {
-          if (item.data().username.toLowerCase() === transactions.to.toLowerCase()) {
+          let username = String(item.data().username);
+
+          if (username.toLowerCase() === transactions.to.toLowerCase()) {
             updateDataFromServer(
               item.data(),
               item.id,
@@ -194,7 +226,8 @@ function App() {
 
             updateDoc(docToUpdate, {
               accountBalance:
-                Number(currentUser.accountBalance) - Number(transactions.amount),
+                Number(currentUser.accountBalance) -
+                Number(transactions.amount),
               transactions: [
                 {
                   to: item.data().username,
@@ -204,14 +237,12 @@ function App() {
                 },
                 ...currentUser.transactions,
               ],
-            })
+            });
           }
           return item;
         });
       });
     }
-
-
   }
 
   return (
@@ -220,6 +251,7 @@ function App() {
         value={{
           currentUser: currentUser,
           validateUser: validateUser,
+          error: error,
         }}
       >
         <BrowserRouter>
@@ -232,8 +264,56 @@ function App() {
             />
           )}
 
+          {error && (
+            <div
+              style={{
+                width: "80vw",
+                height: "50vh",
+                minHeight: "80px",
+                margin: "auto",
+                marginTop: "20%",
+              }}
+            >
+              <h1
+                style={{
+                  fontSize: "1.2em",
+                }}
+              >
+                Can't find user 😢
+              </h1>
+
+              <p>
+                Please visit our homepage to register or login
+              </p>
+            </div>
+          )}
+
+          <ul className="my-profile">
+            <li>
+              <p onClick={()=>setDisplay("dashboard")}>H</p>
+            </li>
+
+            <li>
+              <p onClick={()=>setDisplay("transaction")}>Pay</p>
+            </li>
+
+            <li>
+              <p>H</p>
+            </li>
+
+            <li>
+              <p>H</p>
+            </li>
+
+            <li>
+              <p>H</p>
+            </li>
+          </ul>
+
+
           <Routes>
-            {/* <Route path="/" element={<MainPage />}></Route> */}
+            {/* <Route path="/dashboard/transactions" element={ <Transactions/>}></Route> */}
+
             <Route
               path="/login"
               element={<Login validateUser={validateUser} />}
@@ -250,12 +330,19 @@ function App() {
                   completeTransaction={completeTransaction}
                   cancelTransaction={cancelTransaction}
                   validateUser={validateUser}
+                  display={display}
                 />
               }
             ></Route>
             <Route
               path="*"
-              element={<Login validateUser={validateUser} />}
+              element={  <MyAccount
+                  initTransaction={initTransaction}
+                  completeTransaction={completeTransaction}
+                  cancelTransaction={cancelTransaction}
+                  validateUser={validateUser}
+                  display={display}
+                />}
             ></Route>
           </Routes>
         </BrowserRouter>

@@ -1,6 +1,8 @@
-.form-design, .signup-container {
+.form-design,
+.signup-container {
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  min-height: 900px;
   padding: 2em 0;
   margin: auto;
   display: -webkit-box;
@@ -8,14 +10,21 @@
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   background-color: #00006b;
   padding-top: 5em;
   padding-bottom: 3em;
 }
 
-.form-design form, .signup-container form {
+@media screen and (min-width: 900px) {
+  .signup-container, .form-design{
+    min-height: 900px;
+  }
+}
+
+.form-design form,
+.signup-container form {
   background: white;
   width: 95%;
   max-width: 570px;
@@ -28,12 +37,13 @@
 
 .signup-container .error {
   color: red;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 
 .input-div {
   margin-top: 0.7em;
   padding: 0.4em;
+  text-align: center;
 }
 
 .input-div input {
@@ -49,22 +59,22 @@
 }
 
 .input-div input::-webkit-input-placeholder {
-  font-size: .8em;
+  font-size: 0.8em;
   color: #9b9b9b;
 }
 
 .input-div input:-ms-input-placeholder {
-  font-size: .8em;
+  font-size: 0.8em;
   color: #9b9b9b;
 }
 
 .input-div input::-ms-input-placeholder {
-  font-size: .8em;
+  font-size: 0.8em;
   color: #9b9b9b;
 }
 
 .input-div input::placeholder {
-  font-size: .8em;
+  font-size: 0.8em;
   color: #9b9b9b;
 }
 
@@ -76,11 +86,27 @@
 .input-div input[type="submit"] {
   padding: 0.5em;
   font-size: 0.9em;
-  width: 120px;
-  background-color: white;
+  width: 50%;
+  max-width: 120px;
+  background-color: rgb(255, 255, 255);
   border: 1px solid #010130;
   color: #010130;
   font-size: 1em;
   cursor: pointer;
 }
-/*# sourceMappingURL=Signup.css.map */
+
+.google{
+  background-color: #0000c8;
+  font-size: 1.3em;
+  width: 50%;
+  max-width: 150px;
+  margin-inline: auto;
+  cursor: pointer;
+  padding: .5em;
+  border-top-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+  border: .5px solid #ffffff;
+  
+}
+
+/*# sourceMappingURL=Signup.css.map*/

@@ -1,4 +1,19 @@
-.form-design, .signup-container, .login-wrap, .transfer {
+@import "./AccountDetails.css";
+@import "./Signup.css";
+@import "./Login.css";
+@import "./Transfer.css";
+@import "./Header.css";
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+body{
+  padding: 0;
+  margin: 0;
+}
+/* .form-design, .signup-container, .login-wrap, .transfer {
   width: 100%;
   height: 100vh;
   padding: 2em 0;
@@ -765,5 +780,5 @@ ul {
   min-height: 300px;
   width: 100%;
 
-}
+} */
 /*# sourceMappingURL=App.css.map */

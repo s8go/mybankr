@@ -120,9 +120,13 @@ useEffect(()=>{
 
       <div>
         <div className="sign-in-opt">
-          <p className="google">Google</p>
+          <p className="google alternate">
+            <i className="fa fa-home"></i>
+            Google
+          </p>
+          
         </div>
-        <p>
+        <p className="alternate">
           <span className="signup" onClick={() => Navigate("/login")}>
             Already a user? Log In{" "}
           </span>
