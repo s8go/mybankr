@@ -1,4 +1,11 @@
 import React, { createContext, useEffect, useState } from "react";
+import {
+  FaHome,
+  FaMoneyCheck,
+  FaMobile,
+  FaTools,
+  FaUserAlt,
+} from "react-icons/fa";
 
 //Firebase
 import { app, database } from "./firebaseConfig";
@@ -6,6 +13,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import {
   collection,
@@ -34,9 +43,10 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [transactionType, setTransactionType] = useState(false);
   const [error, setError] = useState(false);
-  const [display, setDisplay] = useState("dashboard")
+  const [display, setDisplay] = useState("dashboard");
   const auth = getAuth();
   const myCollection = collection(database, "users");
+  const provider = new GoogleAuthProvider();
 
   // const provider = new GoogleAuthProvider();
   //Get the snapshots after every transactions
@@ -56,22 +66,20 @@ function App() {
     });
   }, [transactionType]);
 
-  // console.log(currentUser);
-
-  //SignUp with google
-
   /* 
   This is the login code to set the current user : it calls a loginUser function
   which is used to get the user details from the database
   */
 
- async function validateUser(loggedUser) {
-   await signInWithEmailAndPassword(
+ console.log(window.localStorage)
+
+  async function validateUser(loggedUser) {
+    await signInWithEmailAndPassword(
       auth,
       loggedUser.email,
       loggedUser.password
     ).catch((err) => {
-      alert(err.message);
+      alert("Invalid user details...Please signup or login with correct details");
     });
 
     await getDocs(myCollection)
@@ -88,31 +96,69 @@ function App() {
             user.password === loggedUser.password
           )
             setCurrentUser(user);
-          // else if (
-          //   email !== loggedUser.email &&
-          //   user.password !== loggedUser.password
-          // )
-          //   console.log("User Not Found!");
-          // else if (
-          //   email === loggedUser.email &&
-          //   user.password !== loggedUser.password
-          // )
-          //   console.log("Wrong Password");
-          // return null;
+
+          return null;
         });
       })
       .catch((err) => {
         setError(true);
         console.log(err.message);
       });
+  }
 
-    // signInWithPopup(auth, provider)
+  //SignUp with google
+
+  async function googleValidate(sys) {
+    // let user;
+
+    // await signInWithPopup(auth, provider)
     //   .then((res) => {
-    //     console.log(res.user);
+    //     user = {
+    //       fullName: res.user.displayName,
+    //       username: res.user.email.slice(0, res.user.email.indexOf("@")),
+    //       email: res.user.email,
+    //     };
     //   })
     //   .catch((err) => {
     //     alert(err.message);
     //   });
+
+    // await userAdd();
+
+    // function userAdd() {
+    //   if (sys === "signup") {
+    //     addDoc(myCollection, {
+    //       ...user,
+    //       accountBalance: 5000,
+    //       transactions: [
+    //         {
+    //           from: "Bankr",
+    //           amount: 5000,
+    //           type: "deposit",
+    //           number: user.username.slice(0, 2) + 1,
+    //         },
+    //       ],
+    //     }).then((res) => console.log("User Added", res));
+    //   } else if (sys === "login") {
+    //     getDocs(myCollection)
+    //       .then((response) => {
+    //         return response.docs.map((item) => {
+    //           return { ...item.data(), id: item.id };
+    //         });
+    //       })
+    //       .then((data) => {
+    //         data.filter((fetchUser) => {
+    //           let email = String(fetchUser.email).toLowerCase();
+    //           if (email === user.email.toLowerCase()) setCurrentUser(fetchUser);
+    //         });
+    //       })
+    //       .catch((err) => {
+    //         setError(true);
+    //         console.log(err.message);
+    //       });
+    //   }
+    // }
+    alert("Not Available")
   }
 
   /* 
@@ -121,31 +167,37 @@ function App() {
   */
 
   async function registerUser(newUser) {
+   
+
     await createUserWithEmailAndPassword(auth, newUser.email, newUser.password)
       .then((response) => {
         console.log("ACCT CREATED");
         setCurrentUser(newUser);
+
+        addDoc(myCollection, {
+          fullName: newUser.fullName,
+          username: newUser.username,
+          password: newUser.password,
+          accountBalance: 5000,
+          email: newUser.email,
+          phone: newUser.phone,
+          transactions: [
+            {
+              from: "Bankr",
+              amount: 5000,
+              type: "deposit",
+              number: newUser.username.slice(0, 2) + 1,
+            },
+          ],
+        })
       })
       .catch((err) => {
-        alert(err.message);
+       alert(err.message.slice(err.message.indexOf("(") + 1, err.message.lastIndexOf(")")) + " ...Please Login instead")
       });
 
-    await addDoc(myCollection, {
-      fullName: newUser.fullName,
-      username: newUser.username,
-      password: newUser.password,
-      accountBalance: 5000,
-      email: newUser.email,
-      phone: newUser.phone,
-      transactions: [
-        {
-          from: "Bankr",
-          amount: 5000,
-          type: "deposit",
-          number: newUser.username.slice(0, 2) + 1,
-        },
-      ],
-    }).catch((err) => alert(err.message));
+     
+
+   
   }
 
   //Initiate transaction, TransType is the transaction type
@@ -282,45 +334,65 @@ function App() {
                 Can't find user 😢
               </h1>
 
-              <p>
-                Please visit our homepage to register or login
-              </p>
+              <p>Please visit our homepage to register or login</p>
             </div>
           )}
 
-          <ul className="my-profile">
+        {
+          currentUser &&   <div className="my-profile">
+          <ul>
             <li>
-              <p onClick={()=>setDisplay("dashboard")}>H</p>
+              <p onClick={() => setDisplay("transaction")}>
+                <FaMoneyCheck />{" "}
+              </p>
             </li>
 
             <li>
-              <p onClick={()=>setDisplay("transaction")}>Pay</p>
+              <p>
+                <FaMobile />
+              </p>
             </li>
 
             <li>
-              <p>H</p>
+              <p onClick={() => setDisplay("dashboard")}>
+                <FaHome />
+              </p>
+            </li>
+            <li>
+              <p>
+                <FaTools />
+              </p>
             </li>
 
             <li>
-              <p>H</p>
-            </li>
-
-            <li>
-              <p>H</p>
+              <p>
+                <FaUserAlt />
+              </p>
             </li>
           </ul>
-
+        </div>
+        }
 
           <Routes>
             {/* <Route path="/dashboard/transactions" element={ <Transactions/>}></Route> */}
 
             <Route
               path="/login"
-              element={<Login validateUser={validateUser} />}
+              element={
+                <Login
+                  validateUser={validateUser}
+                  googleValidate={googleValidate}
+                />
+              }
             ></Route>
             <Route
               path="/signup"
-              element={<Signup registerUser={registerUser} />}
+              element={
+                <Signup
+                  registerUser={registerUser}
+                  googleValidate={googleValidate}
+                />
+              }
             ></Route>
             <Route
               path="/dashboard"
@@ -336,13 +408,15 @@ function App() {
             ></Route>
             <Route
               path="*"
-              element={  <MyAccount
+              element={
+                <MyAccount
                   initTransaction={initTransaction}
                   completeTransaction={completeTransaction}
                   cancelTransaction={cancelTransaction}
                   validateUser={validateUser}
                   display={display}
-                />}
+                />
+              }
             ></Route>
           </Routes>
         </BrowserRouter>

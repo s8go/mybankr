@@ -59,7 +59,7 @@ nav .bigScreen {
   display: none;
 }
 
-@media screen and (min-width: 760px) {
+@media screen and (min-width: 970px) {
   nav {
     padding: 0.4em;
     display: -webkit-box;
@@ -249,7 +249,7 @@ ul {
 }
 
 .my-profile{
-  background-color: #ffffff;
+  background-color: #010130;
   border-top: 1px groove rgb(104, 104, 104);
   position: fixed;
   bottom: -15px;
@@ -262,9 +262,27 @@ ul {
   align-items: center;
 }
 
+.my-profile ul{
+  width: 100%;
+  max-width: 500px;
+  margin-inline: auto;
+  display: flex;
+  justify-content: space-between;
+
+}
+
 .my-profile li{
 display: inline-block;
-color: rgb(104, 104, 104);
+color: #6d6d6d;
 cursor: pointer;
+}
+
+.my-profile li p{
+  font-size: 1.2em;
+  padding: 1em;
+}
+
+.my-profile li p:hover{
+  color: aliceblue;
 }
 /*# sourceMappingURL=Header.css.map */

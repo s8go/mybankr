@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { userDetails } from "../../App";
 
-const Signup = ({ registerUser }) => {
+const Signup = ({ registerUser , googleValidate}) => {
   const [newUser, setNewUser] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
   const {currentUser} = useContext(userDetails)
@@ -120,11 +120,9 @@ useEffect(()=>{
 
       <div>
         <div className="sign-in-opt">
-          <p className="google alternate">
-            <i className="fa fa-home"></i>
+          <p className="google alternate" onClick={()=> googleValidate("signup")}>
             Google
           </p>
-          
         </div>
         <p className="alternate">
           <span className="signup" onClick={() => Navigate("/login")}>

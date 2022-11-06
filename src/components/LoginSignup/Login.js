@@ -1,7 +1,8 @@
-import React,{ useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {FaGoogle} from "react-icons/fa"
 
-const Login = ({ validateUser }) => {
+const Login = ({ validateUser, googleValidate }) => {
   const [loggedUser, setLoggedUser] = useState({});
   const [signedIn, setSignedIn] = useState(false);
   const Navigate = useNavigate();
@@ -16,14 +17,12 @@ This is the input onChange function to get input details
       password: localStorage.password,
     });
 
-      if (signedIn) {
-        Navigate("/dashboard");
-      } else {
-        setSignedIn(false);
-      }
-  
+    if (signedIn) {
+      Navigate("/dashboard");
+    } else {
+      setSignedIn(false);
+    }
   }, [signedIn]);
-
 
   function loginDetails(event) {
     setLoggedUser((curr) => {
@@ -34,10 +33,8 @@ This is the input onChange function to get input details
   function submitForm() {
     validateUser(loggedUser);
     setSignedIn(true);
-
     localStorage.email = loggedUser.email;
     localStorage.password = loggedUser.password;
-
   }
 
   return (
@@ -79,19 +76,27 @@ This is the input onChange function to get input details
       </form>
 
       <div>
-      <div className="sign-in-opt">
-          <p className="google alternate">
-            Google
+        <div className="sign-in-opt">
+          <p
+            className="google alternate"
+            onClick={async () => {
+              await googleValidate("login");
+              // await Navigate("/dashboard");
+            }}
+          >
+            <FaGoogle/>
           </p>
         </div>
-        
+
         <p className="alternate">
           <span>Don't have an account? </span>
-          <span className="signup" onClick={() => {
-            Navigate("/signup");
-            console.log("Signup")
-          }}>
-            Create account here{" "}
+          <span
+            className="signup"
+            onClick={() => {
+              Navigate("/signup");
+            }}
+          >
+            Create account here
           </span>
         </p>
       </div>
