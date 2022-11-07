@@ -202,11 +202,31 @@
   
 
   75%{
-    border-top: 2px solid blue;
+    border-top: 2px solid rgb(0, 0, 255);
     border-bottom: 2px solid green;
     border-left: 2px solid red;
     border-right: 2px solid yellow;
   }
+}
+
+.redirects{
+  width: 50%;
+  margin: auto;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: baseline;
+  padding-top: 25%;
+  height: 100vh;
+  font-size: 1rem;
+}
+
+.redirects a{
+  background-color: rgb(0, 0, 255);
+  padding: 1em 2em;
+  font-size: max(.9em, 1.5vw);
+  text-decoration: none;
+  color: rgb(247, 227, 188);
+  margin: 1em;
 }
 
 /*# sourceMappingURL=AccountDetails.css.map */

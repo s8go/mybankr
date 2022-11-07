@@ -6,19 +6,23 @@ import {
   FaTools,
   FaUserAlt,
 } from "react-icons/fa";
+import {
+  useLogin,
+  signUser,
+  updateDataFromServer,
+} from "./components/Logic/userLogic";
 
 //Firebase
 import { app, database } from "./firebaseConfig";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
+import // getAuth,
+// createUserWithEmailAndPassword,
+// signInWithEmailAndPassword,
+// GoogleAuthProvider,
+// signInWithPopup,
+"firebase/auth";
 import {
   collection,
-  addDoc,
+  // addDoc,
   getDocs,
   doc,
   updateDoc,
@@ -35,18 +39,18 @@ import Signup from "./components/LoginSignup/Signup";
 
 import Transfer from "./components/Logic/Transfer";
 import NavBar from "./components/mainpage/NavBar";
-import Transactions from "./components/Account/Transactions";
 
 export const userDetails = createContext();
 
 function App() {
+  console.log(app)
   const [currentUser, setCurrentUser] = useState(null);
   const [transactionType, setTransactionType] = useState(false);
   const [error, setError] = useState(false);
   const [display, setDisplay] = useState("dashboard");
-  const auth = getAuth();
+  // const auth = getAuth();
   const myCollection = collection(database, "users");
-  const provider = new GoogleAuthProvider();
+  // const provider = new GoogleAuthProvider();
 
   // const provider = new GoogleAuthProvider();
   //Get the snapshots after every transactions
@@ -71,46 +75,14 @@ function App() {
   which is used to get the user details from the database
   */
 
- console.log(window.localStorage)
-
-  async function validateUser(loggedUser) {
-    await signInWithEmailAndPassword(
-      auth,
-      loggedUser.email,
-      loggedUser.password
-    ).catch((err) => {
-      alert("Invalid user details...Please signup or login with correct details");
-    });
-
-    await getDocs(myCollection)
-      .then((response) => {
-        return response.docs.map((item) => {
-          return { ...item.data(), id: item.id };
-        });
-      })
-      .then((data) => {
-        data.filter((user) => {
-          let email = String(user.email).toLowerCase();
-          if (
-            email === loggedUser.email.toLowerCase() &&
-            user.password === loggedUser.password
-          )
-            setCurrentUser(user);
-
-          return null;
-        });
-      })
-      .catch((err) => {
-        setError(true);
-        console.log(err.message);
-      });
+  async function validateUser(loggedUser, message=true) {
+    const [deeUser] = await useLogin(loggedUser, message);
+    setCurrentUser(deeUser);
   }
 
   //SignUp with google
 
   async function googleValidate(sys) {
-    // let user;
-
     // await signInWithPopup(auth, provider)
     //   .then((res) => {
     //     user = {
@@ -158,7 +130,7 @@ function App() {
     //       });
     //   }
     // }
-    alert("Not Available")
+    alert("Not Available");
   }
 
   /* 
@@ -167,37 +139,9 @@ function App() {
   */
 
   async function registerUser(newUser) {
-   
-
-    await createUserWithEmailAndPassword(auth, newUser.email, newUser.password)
-      .then((response) => {
-        console.log("ACCT CREATED");
-        setCurrentUser(newUser);
-
-        addDoc(myCollection, {
-          fullName: newUser.fullName,
-          username: newUser.username,
-          password: newUser.password,
-          accountBalance: 5000,
-          email: newUser.email,
-          phone: newUser.phone,
-          transactions: [
-            {
-              from: "Bankr",
-              amount: 5000,
-              type: "deposit",
-              number: newUser.username.slice(0, 2) + 1,
-            },
-          ],
-        })
-      })
-      .catch((err) => {
-       alert(err.message.slice(err.message.indexOf("(") + 1, err.message.lastIndexOf(")")) + " ...Please Login instead")
-      });
-
-     
-
-   
+    await signUser(newUser);
+    await validateUser(newUser);
+    console.log(localStorage, currentUser);
   }
 
   //Initiate transaction, TransType is the transaction type
@@ -214,65 +158,39 @@ function App() {
 
   //Validate transaction, depending on the transaction type
 
-  //Setting the update callback function
-
-  function updateDataFromServer(
-    userToUpdate,
-    id,
-    sender,
-    transactions,
-    transNumber,
-    transactionType = "deposit"
-  ) {
-    const docToUpdate = doc(database, "users", id);
-
-    updateDoc(docToUpdate, {
-      accountBalance:
-        Number(userToUpdate.accountBalance) + Number(transactions.amount),
-      transactions: [
-        {
-          from: sender,
-          amount: transactions.amount,
-          type: transactionType,
-          number: transNumber,
-        },
-        ...userToUpdate.transactions,
-      ],
-    })
-      .then((res) => {
-        cancelTransaction();
-      })
-      .catch((err) => {
-        console.log("INVALID TRANSACTION");
-      });
-  }
-
-  function completeTransaction(transactions, transType) {
+  async function completeTransaction(transactions, transType) {
     let transactionRef =
       currentUser.id.slice(0, 5) + "" + Math.floor(Math.random() * 100000);
 
     if (transType === "deposit" || transType === "loan") {
-      updateDataFromServer(
-        currentUser,
-        currentUser.id,
-        "Bankr",
-        transactions,
-        transactionRef
-      );
+      await updateDataFromServer({
+        userToUpdate: currentUser,
+        id: currentUser.id,
+        sender: "Bankr",
+        transactions: transactions,
+        transNumber: transactionRef,
+        transactionType: "deposit",
+        meto: function() {
+          cancelTransaction();
+        },
+      });
     } else if (transType === "transfer") {
       getDocs(myCollection).then((res) => {
         res.docs.map((item) => {
           let username = String(item.data().username);
 
           if (username.toLowerCase() === transactions.to.toLowerCase()) {
-            updateDataFromServer(
-              item.data(),
-              item.id,
-              currentUser.username,
-              transactions,
-              transactionRef,
-              "deposit"
-            );
+            updateDataFromServer({
+              userToUpdate: item.data(),
+              id: item.id,
+              sender: currentUser.username,
+              transactions: transactions,
+              transNumber: transactionRef,
+              transactionType: "deposit",
+              meto: function() {
+                cancelTransaction();
+              },
+            });
 
             const docToUpdate = doc(database, "users", currentUser.id);
 
@@ -304,10 +222,13 @@ function App() {
           currentUser: currentUser,
           validateUser: validateUser,
           error: error,
+          setError: setError,
         }}
       >
         <BrowserRouter>
           <NavBar />
+
+          
           {transactionType !== false && (
             <Transfer
               completeTransaction={completeTransaction}
@@ -331,47 +252,47 @@ function App() {
                   fontSize: "1.2em",
                 }}
               >
-                Can't find user 😢
+                Can't find user
               </h1>
 
               <p>Please visit our homepage to register or login</p>
             </div>
           )}
 
-        {
-          currentUser &&   <div className="my-profile">
-          <ul>
-            <li>
-              <p onClick={() => setDisplay("transaction")}>
-                <FaMoneyCheck />{" "}
-              </p>
-            </li>
+          {currentUser && (
+            <div className="my-profile">
+              <ul>
+                <li>
+                  <p onClick={() => setDisplay("transaction")}>
+                    <FaMoneyCheck />{" "}
+                  </p>
+                </li>
 
-            <li>
-              <p>
-                <FaMobile />
-              </p>
-            </li>
+                <li>
+                  <p>
+                    <FaMobile />
+                  </p>
+                </li>
 
-            <li>
-              <p onClick={() => setDisplay("dashboard")}>
-                <FaHome />
-              </p>
-            </li>
-            <li>
-              <p>
-                <FaTools />
-              </p>
-            </li>
+                <li>
+                  <p onClick={() => setDisplay("dashboard")}>
+                    <FaHome />
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    <FaTools />
+                  </p>
+                </li>
 
-            <li>
-              <p>
-                <FaUserAlt />
-              </p>
-            </li>
-          </ul>
-        </div>
-        }
+                <li>
+                  <p>
+                    <FaUserAlt />
+                  </p>
+                </li>
+              </ul>
+            </div>
+          )}
 
           <Routes>
             {/* <Route path="/dashboard/transactions" element={ <Transactions/>}></Route> */}
@@ -407,15 +328,12 @@ function App() {
               }
             ></Route>
             <Route
-              path="*"
-              element={
-                <MyAccount
-                  initTransaction={initTransaction}
-                  completeTransaction={completeTransaction}
-                  cancelTransaction={cancelTransaction}
-                  validateUser={validateUser}
-                  display={display}
-                />
+               path="*"
+               element={
+                 <Login
+                   validateUser={validateUser}
+                   googleValidate={googleValidate}
+                 />
               }
             ></Route>
           </Routes>

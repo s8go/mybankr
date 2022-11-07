@@ -12,7 +12,7 @@ const MyAccount = ({ initTransaction, completeTransaction, validateUser, display
 
   useEffect(() => {
     if (user === null && validateUser !== undefined) {
-      validateUser(localStorage);
+      validateUser(localStorage, false);
     } else {
       setCurrentUser({ ...user });
       setUserPresent(true);
