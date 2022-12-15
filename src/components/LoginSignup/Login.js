@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {FaGoogle} from "react-icons/fa";
-import styled from "styled-components"
 
 const Login = ({ validateUser, googleValidate }) => {
   const [loggedUser, setLoggedUser] = useState({});
@@ -39,7 +38,7 @@ This is the input onChange function to get input details
   }
 
   return (
-    <LoginWrap>
+    <div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -102,16 +101,8 @@ This is the input onChange function to get input details
           </span>
         </p>
       </div>
-    </LoginWrap>
+    </div>
   );
 };
 
 export default Login;
-
-const LoginWrap = styled.div`
-background-color: red;
-width: 50%;
-display: flex;
-flex-direction: column;
-align-items: center;
-`

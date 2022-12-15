@@ -226,7 +226,7 @@ function App() {
         }}
       >
         <BrowserRouter>
-          <NavBar />
+          {/* <NavBar /> */}
 
           
           {transactionType !== false && (
