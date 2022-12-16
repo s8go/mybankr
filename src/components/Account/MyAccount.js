@@ -21,12 +21,12 @@ const MyAccount = ({ initTransaction, completeTransaction, validateUser, display
 
   return (
     <>
-      {userPresent && display === "dashboard" && (
+      {/* {userPresent && display === "dashboard" && ( */}
         <AccountDetails
           completeTransaction={completeTransaction}
           currentUser={currentUser}
         />
-      )}
+      {/* )} */}
 
       {
         userPresent && display === "transaction" && <Transactions initTransaction={initTransaction}/>
