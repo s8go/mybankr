@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Transactions from "./Transactions";
 import profile_img from "../../images/profile.webp"
-import { FaMoon, FaSun } from "react-icons/fa";
+// import { FaMoon, FaSun } from "react-icons/fa";
 import {DesktopNavBar} from "../NavBar/DesktopNavBar";
 import MobileNav from "../NavBar/MobileNav";
 
@@ -17,8 +17,6 @@ const AccountDetails = ({
   completeTransaction,
   currentUser,
 }) => {
-
-  console.log(currentUser.username, "username")
 
   const today = new Date();
 
@@ -69,7 +67,7 @@ const AccountDetails = ({
       {currentUser.hasOwnProperty("transactions") && (
         <Transact>
          <div className="top">
-          <FaSun/>
+          {/* <FaSun/> */}
          <p>{currentUser.email}</p>
          </div>
 

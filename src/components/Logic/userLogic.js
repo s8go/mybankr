@@ -80,8 +80,6 @@ export async function signUser(newUser) {
           },
         ],
       });
-
-      console.log("Account Created");
       localStorage.email = newUser.email;
       localStorage.password = newUser.password;
     })

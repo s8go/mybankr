@@ -43,7 +43,6 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [transactionType, setTransactionType] = useState(false);
   const [error, setError] = useState(false);
-  const [display, setDisplay] = useState("dashboard");
   // const auth = getAuth();
   const myCollection = collection(database, "users");
   // const provider = new GoogleAuthProvider();
@@ -138,7 +137,6 @@ function App() {
   async function registerUser(newUser) {
     await signUser(newUser);
     await validateUser(newUser);
-    console.log(localStorage, currentUser);
   }
 
   //Initiate transaction, TransType is the transaction type
@@ -212,14 +210,7 @@ function App() {
     }
   }
 
-  const Global = createGlobalStyle`
-  body {
-    padding: 0;
-    margin: 0;
-background-color: rgb(0, 0, 38);
-  }`
-
-  console.log(error, "ERROR")
+  
   return (
     <div>
 
@@ -275,7 +266,7 @@ background-color: rgb(0, 0, 38);
                   completeTransaction={completeTransaction}
                   cancelTransaction={cancelTransaction}
                   validateUser={validateUser}
-                  display={display}
+                
                 />
               }
             ></Route>
@@ -305,3 +296,9 @@ export default App;
 
 
 
+const Global = createGlobalStyle`
+body {
+  padding: 0;
+  margin: 0;
+background-color: rgb(0, 0, 38);
+}`

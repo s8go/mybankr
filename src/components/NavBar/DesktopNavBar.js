@@ -1,10 +1,9 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Logo from "../../images/Bankr.png"
 
 export function DesktopNavBar(){
-    const [openMenu, setOpenMenu] = useState(false);
     const Navigate = useNavigate();
 
     function logout(){

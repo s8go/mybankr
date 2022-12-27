@@ -3,7 +3,7 @@ import AccountDetails from "./AccountDetails";
 import { userDetails } from "../../App";
 import styled from "styled-components";
 
-const MyAccount = ({ initTransaction, completeTransaction, validateUser, display }) => {
+const MyAccount = ({ initTransaction, completeTransaction, validateUser }) => {
   const { currentUser: user, error } = useContext(userDetails);
   const [currentUser, setCurrentUser] = useState();
   const [userPresent, setUserPresent] = useState(false);
@@ -22,7 +22,7 @@ const MyAccount = ({ initTransaction, completeTransaction, validateUser, display
   
   return (
     <>
-      {userPresent && display === "dashboard" && (
+      {userPresent && (
         <AccountDetails
           completeTransaction={completeTransaction}
           currentUser={currentUser}
