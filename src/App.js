@@ -1,11 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import {
-  FaHome,
-  FaMoneyCheck,
-  FaMobile,
-  FaTools,
-  FaUserAlt,
-} from "react-icons/fa";
+
 import {
   useLogin,
   signUser,
@@ -38,7 +32,9 @@ import Login from "./components/LoginSignup/Login";
 import Signup from "./components/LoginSignup/Signup";
 
 import Transfer from "./components/Logic/Transfer";
-import NavBar from "./components/mainpage/NavBar";
+import { createGlobalStyle } from "styled-components";
+
+
 
 export const userDetails = createContext();
 
@@ -47,7 +43,6 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [transactionType, setTransactionType] = useState(false);
   const [error, setError] = useState(false);
-  const [display, setDisplay] = useState("dashboard");
   // const auth = getAuth();
   const myCollection = collection(database, "users");
   // const provider = new GoogleAuthProvider();
@@ -79,6 +74,7 @@ function App() {
     const [deeUser] = await useLogin(loggedUser, message);
     setCurrentUser(deeUser);
   }
+ 
 
   //SignUp with google
 
@@ -141,7 +137,6 @@ function App() {
   async function registerUser(newUser) {
     await signUser(newUser);
     await validateUser(newUser);
-    console.log(localStorage, currentUser);
   }
 
   //Initiate transaction, TransType is the transaction type
@@ -215,8 +210,11 @@ function App() {
     }
   }
 
+  
   return (
-    <div className="App">
+    <div>
+
+      <Global/>
       <userDetails.Provider
         value={{
           currentUser: currentUser,
@@ -226,7 +224,7 @@ function App() {
         }}
       >
         <BrowserRouter>
-          <NavBar />
+        
 
           
           {transactionType !== false && (
@@ -237,62 +235,7 @@ function App() {
             />
           )}
 
-          {error && (
-            <div
-              style={{
-                width: "80vw",
-                height: "50vh",
-                minHeight: "80px",
-                margin: "auto",
-                marginTop: "20%",
-              }}
-            >
-              <h1
-                style={{
-                  fontSize: "1.2em",
-                }}
-              >
-                Can't find user
-              </h1>
-
-              <p>Please visit our homepage to register or login</p>
-            </div>
-          )}
-
-          {currentUser && (
-            <div className="my-profile">
-              <ul>
-                <li>
-                  <p onClick={() => setDisplay("transaction")}>
-                    <FaMoneyCheck />{" "}
-                  </p>
-                </li>
-
-                <li>
-                  <p>
-                    <FaMobile />
-                  </p>
-                </li>
-
-                <li>
-                  <p onClick={() => setDisplay("dashboard")}>
-                    <FaHome />
-                  </p>
-                </li>
-                <li>
-                  <p>
-                    <FaTools />
-                  </p>
-                </li>
-
-                <li>
-                  <p>
-                    <FaUserAlt />
-                  </p>
-                </li>
-              </ul>
-            </div>
-          )}
+        
 
           <Routes>
             {/* <Route path="/dashboard/transactions" element={ <Transactions/>}></Route> */}
@@ -323,7 +266,7 @@ function App() {
                   completeTransaction={completeTransaction}
                   cancelTransaction={cancelTransaction}
                   validateUser={validateUser}
-                  display={display}
+                
                 />
               }
             ></Route>
@@ -350,3 +293,12 @@ function App() {
 }
 
 export default App;
+
+
+
+const Global = createGlobalStyle`
+body {
+  padding: 0;
+  margin: 0;
+background-color: rgb(0, 0, 38);
+}`

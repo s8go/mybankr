@@ -71,7 +71,6 @@ export async function signUser(newUser) {
         password: newUser.password,
         accountBalance: 5000,
         email: newUser.email,
-        phone: newUser.phone,
         transactions: [
           {
             from: "Bankr",
@@ -81,8 +80,6 @@ export async function signUser(newUser) {
           },
         ],
       });
-
-      console.log("Account Created");
       localStorage.email = newUser.email;
       localStorage.password = newUser.password;
     })

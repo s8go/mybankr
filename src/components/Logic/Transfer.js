@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 
 const Transfer = ({
   completeTransaction,
@@ -22,7 +23,7 @@ const Transfer = ({
   }
 
   return (
-    <div className="transfer">
+    <TransferTrans>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -30,8 +31,8 @@ const Transfer = ({
           setProgress("...");
         }}
       >
-        <div>
-          <p className="cancel" onClick={cancelTransaction}>
+        <div className="cancel">
+          <p onClick={cancelTransaction}>
             X
           </p>
         </div>
@@ -84,8 +85,73 @@ const Transfer = ({
           )}
         </div>
       </form>
-    </div>
+    </TransferTrans>
   );
 };
 
 export default Transfer;
+
+
+const TransferTrans = styled.div`
+position: fixed;
+height: 100vh;
+width: 100vw;
+top:0;
+left:0;
+z-index: 10001;
+display:grid;
+place-items:center;
+background-color: rgba(0, 0, 0, 0.9);
+
+& form{
+  background-color: rgba(0, 0, 38);
+  border-radius: .5em;
+  width: 90%;
+  max-width: 500px;
+text-align: center;  
+padding-bottom: 1em;
+}
+
+& .cancel{
+  text-align: right;
+  padding-inline: .5em;
+  color: white;
+  cursor: pointer;
+}
+
+
+& div{
+  margin-top: 1em;
+ 
+& input, & label{
+  display: block;
+  width: 50%;
+  margin: auto;
+  margin-top: .5em;
+  font-size: max(.9em, .9vw);
+}
+
+& input{
+  border-radius: .5em;
+  padding: .5em;
+  outline: none;
+}
+
+& input[type="submit"]{
+  background: white;
+  width: 25%;
+  font-size: max(1em, 1vw);
+  border: none;
+  outline: none;
+  color: black;
+  padding: .6em 0;
+
+}
+
+& label {
+  text-align: left;
+  color: white;
+}
+}
+
+`
