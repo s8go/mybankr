@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import AccountDetails from "./AccountDetails";
 import { userDetails } from "../../App";
-import Transactions from "./Transactions";
+import styled from "styled-components";
 
 const MyAccount = ({ initTransaction, completeTransaction, validateUser, display }) => {
   const { currentUser: user, error } = useContext(userDetails);
@@ -19,26 +19,38 @@ const MyAccount = ({ initTransaction, completeTransaction, validateUser, display
     }
   }, [user]);
 
+  
   return (
     <>
-      {/* {userPresent && display === "dashboard" && ( */}
+      {userPresent && display === "dashboard" && (
         <AccountDetails
           completeTransaction={completeTransaction}
           currentUser={currentUser}
+          initTransaction={initTransaction}
         />
-      {/* )} */}
+      )}
 
       {
-        userPresent && display === "transaction" && <Transactions initTransaction={initTransaction}/>
+        // userPresent && display === "transaction" && <Transactions initTransaction={initTransaction}/>
       }
 
       {error === true ? (
         <div></div>
       ) : (
-        <div className="loading">{userPresent ? "" : <h1>Loading....</h1>}</div>
+        <Loading>{userPresent ? "" : <h1>Loading....</h1>}</Loading>
       )}
     </>
   );
 };
 
 export default MyAccount;
+
+
+const Loading = styled.div`
+width: 100vw;
+height: 100vh;
+display: grid;
+place-items: center;
+color: rgb(152, 152, 152);
+font-size: max(1.1em, 1.4vw);
+`

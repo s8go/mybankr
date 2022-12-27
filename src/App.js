@@ -1,11 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import {
-  FaHome,
-  FaMoneyCheck,
-  FaMobile,
-  FaTools,
-  FaUserAlt,
-} from "react-icons/fa";
+
 import {
   useLogin,
   signUser,
@@ -38,7 +32,9 @@ import Login from "./components/LoginSignup/Login";
 import Signup from "./components/LoginSignup/Signup";
 
 import Transfer from "./components/Logic/Transfer";
-import NavBar from "./components/mainpage/NavBar";
+import { createGlobalStyle } from "styled-components";
+
+
 
 export const userDetails = createContext();
 
@@ -79,6 +75,7 @@ function App() {
     const [deeUser] = await useLogin(loggedUser, message);
     setCurrentUser(deeUser);
   }
+ 
 
   //SignUp with google
 
@@ -215,8 +212,18 @@ function App() {
     }
   }
 
+  const Global = createGlobalStyle`
+  body {
+    padding: 0;
+    margin: 0;
+background-color: rgb(0, 0, 38);
+  }`
+
+  console.log(error, "ERROR")
   return (
-    <div className="App">
+    <div>
+
+      <Global/>
       <userDetails.Provider
         value={{
           currentUser: currentUser,
@@ -226,7 +233,7 @@ function App() {
         }}
       >
         <BrowserRouter>
-          {/* <NavBar /> */}
+        
 
           
           {transactionType !== false && (
@@ -237,62 +244,7 @@ function App() {
             />
           )}
 
-          {error && (
-            <div
-              style={{
-                width: "80vw",
-                height: "50vh",
-                minHeight: "80px",
-                margin: "auto",
-                marginTop: "20%",
-              }}
-            >
-              <h1
-                style={{
-                  fontSize: "1.2em",
-                }}
-              >
-                Can't find user
-              </h1>
-
-              <p>Please visit our homepage to register or login</p>
-            </div>
-          )}
-
-          {currentUser && (
-            <div className="my-profile">
-              <ul>
-                <li>
-                  <p onClick={() => setDisplay("transaction")}>
-                    <FaMoneyCheck />{" "}
-                  </p>
-                </li>
-
-                <li>
-                  <p>
-                    <FaMobile />
-                  </p>
-                </li>
-
-                <li>
-                  <p onClick={() => setDisplay("dashboard")}>
-                    <FaHome />
-                  </p>
-                </li>
-                <li>
-                  <p>
-                    <FaTools />
-                  </p>
-                </li>
-
-                <li>
-                  <p>
-                    <FaUserAlt />
-                  </p>
-                </li>
-              </ul>
-            </div>
-          )}
+        
 
           <Routes>
             {/* <Route path="/dashboard/transactions" element={ <Transactions/>}></Route> */}
@@ -350,3 +302,6 @@ function App() {
 }
 
 export default App;
+
+
+

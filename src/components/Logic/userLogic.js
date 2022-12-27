@@ -71,7 +71,6 @@ export async function signUser(newUser) {
         password: newUser.password,
         accountBalance: 5000,
         email: newUser.email,
-        phone: newUser.phone,
         transactions: [
           {
             from: "Bankr",

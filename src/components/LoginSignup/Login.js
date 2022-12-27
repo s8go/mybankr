@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {FaGoogle} from "react-icons/fa";
-import styled from "styled-components"
+import styled from "styled-components";
+import Logo from "../../images/Bankr.png"
 
 const Login = ({ validateUser, googleValidate }) => {
   const [loggedUser, setLoggedUser] = useState({});
   const [signedIn, setSignedIn] = useState(false);
   const Navigate = useNavigate();
+
 
   /*
 This is the input onChange function to get input details
@@ -76,10 +78,9 @@ This is the input onChange function to get input details
         <div></div>
       </form>
 
-      <div>
+      <SignInOpt>
         <div className="sign-in-opt">
           <p
-            className="google alternate"
             onClick={async () => {
               await googleValidate("login");
               // await Navigate("/dashboard");
@@ -100,7 +101,7 @@ This is the input onChange function to get input details
             Create account here
           </span>
         </p>
-      </div>
+      </SignInOpt>
     </FormWrap>
   );
 };
@@ -108,12 +109,12 @@ This is the input onChange function to get input details
 export default Login;
 
 
-const FormWrap = styled.div`
-background-color: red;
-width: 100vw;
-height: 100vh;
+export const FormWrap = styled.div`
+width: 100%;
+height: 100%;
 min-height: 600px;
-padding: 2em 0;
+min-width: 270px;
+padding: 5em 0 3em 0;
 margin: auto;
 display: -webkit-box;
 display: -ms-flexbox;
@@ -122,18 +123,25 @@ display: flex;
 -webkit-box-direction: normal;
     -ms-flex-direction: column;
         flex-direction: column;
-background-color: #00006b;
-padding-top: 5em;
-padding-bottom: 3em;
+background-color:  rgb(0, 0, 38);
+background-image: url(${Logo});
+background-repeat: no-repeat;
+background-size: 15%;
+
+@media screen and (min-width: 1024px){
+background-size: 5%;
+
+}
 
 & form {
   width: min(90%, 570px);
-  margin: auto;
+  margin-inline: auto;
+  margin-top:2em;
   padding: 1em;
 }
 `
 
-const InputDiv = styled.div`
+export const InputDiv = styled.div`
 text-align: center;
 margin:2em auto;
 width:100%;
@@ -141,7 +149,7 @@ width:100%;
 
 & input {
   display: inline-block;
-  padding: .5em 1em;
+  padding: .5em;
   width: min(95%,300px);
   margin: auto;
   font-size: max(1em, 1.4vw);
@@ -149,8 +157,7 @@ width:100%;
   background-color: transparent;
   outline:none;
   border: none;
-  border-bottom: 1px solid white
-  ;
+  border-bottom: 1px solid white;
 }
 
 & button {
@@ -161,5 +168,36 @@ width:100%;
   font-size: max(1em, 1.2vw);
   border-radius: .5rem;
   cursor:pointer;
+}
+`
+export const SignInOpt = styled.div`
+margin-top: 5em;
+text-align: center;
+
+
+& p, & .sign-in-opt{
+  color: white;
+font-size: max(.8em, 1.2vw);
+margin-inline: auto;
+text-align: center;
+
+& span{
+  cursor: pointer;
+}
+}
+
+& .alternate{
+  width:50%;
+min-width: 200px;
+}
+
+& .sign-in-opt{
+  width:7%;
+  min-width: 80px;
+  border: 1px solid  rgb(0, 0, 74);
+  box-shadow: 5px 5px 5px  rgb(0, 0, 23);
+  border-radius: .3em;
+  cursor: pointer;
+  font-size: max(1em, .8vw);
 }
 `

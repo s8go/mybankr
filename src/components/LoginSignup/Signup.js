@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { userDetails } from "../../App";
+import { FaGoogle } from "react-icons/fa";
+import {FormWrap, InputDiv, SignInOpt} from "./Login"
 
 const Signup = ({ registerUser , googleValidate}) => {
   const [newUser, setNewUser] = useState({});
@@ -31,7 +33,7 @@ useEffect(()=>{
       setErrorMessage("");
     }, 600);
     
-    if (isNaN(newUser.phone)) {
+    if (newUser.phone === true && isNaN(newUser.phone)) {
       setErrorMessage("Invalid phone number");
     } else {
       registerUser(newUser);
@@ -39,14 +41,14 @@ useEffect(()=>{
   }
 
   return (
-    <div className="signup-container">
+    <FormWrap>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           formValidation();
         }}
       >
-        <div className="input-div">
+        <InputDiv>
           <input
             required
             type="text"
@@ -55,9 +57,9 @@ useEffect(()=>{
             placeholder="Fullname"
             onChange={(e) => inputValues(e.target)}
           />
-        </div>
+        </InputDiv>
 
-        <div className="input-div">
+        <InputDiv>
           <input
             required
             type="text"
@@ -66,9 +68,9 @@ useEffect(()=>{
             placeholder="username"
             onChange={(e) => inputValues(e.target)}
           />
-        </div>
+        </InputDiv>
 
-        <div className="input-div">
+        <InputDiv>
           <input
             required
             type="email"
@@ -77,19 +79,9 @@ useEffect(()=>{
             placeholder="Email address"
             onChange={(e) => inputValues(e.target)}
           />
-        </div>
+        </InputDiv>
 
-        <div className="input-div">
-          <input
-            type="tel"
-            name="phone"
-            value={newUser.phone || ""}
-            placeholder="Phone"
-            onChange={(e) => inputValues(e.target)}
-          />
-        </div>
-
-        <div className="input-div">
+        <InputDiv>
           <input
             required
             type="password"
@@ -98,9 +90,9 @@ useEffect(()=>{
             placeholder="Password"
             onChange={(e) => inputValues(e.target)}
           />
-        </div>
+        </InputDiv>
 
-        <div className="input-div">
+        {/* <InputDiv>
           <input
             required
             type="password"
@@ -109,31 +101,41 @@ useEffect(()=>{
             placeholder="Confirm Password"
             onChange={(e) => inputValues(e.target)}
           />
-        </div>
+        </InputDiv> */}
 
         <p className="error">{errorMessage}</p>
 
-        <div className="input-div">
-          <input type="submit" value={currentUser === null ? "Submit" : "Loading"} />
-        </div>
+        <InputDiv>
+        <button type="submit" >{currentUser === null ? "Submit" : "Loading"}</button>
+        </InputDiv>
       </form>
 
-      <div>
+      <SignInOpt>
         <div className="sign-in-opt">
-          <p className="google alternate" onClick={()=> googleValidate("signup")}>
-            Google
+          <p
+            onClick={async () => {
+              await googleValidate("login");
+            
+            }}
+          >
+            <FaGoogle/>
           </p>
         </div>
+
         <p className="alternate">
-          <span className="signup" onClick={() => Navigate("/login")}>
-            Already a user? Log In{" "}
+          <span>Already have an account? </span>
+          <span
+            onClick={() => {
+              Navigate("/login");
+            }}
+          >
+            Login here
           </span>
         </p>
-      </div>
-    </div>
+      </SignInOpt>
+    </FormWrap>
   );
 };
 
 export default Signup;
-
 
