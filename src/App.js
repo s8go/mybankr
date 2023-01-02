@@ -4,6 +4,7 @@ import {
   useLogin,
   signUser,
   updateDataFromServer,
+  googleSign
 } from "./components/Logic/userLogic";
 
 //Firebase
@@ -78,7 +79,9 @@ function App() {
 
   //SignUp with google
 
+
   async function googleValidate(sys) {
+
     // await signInWithPopup(auth, provider)
     //   .then((res) => {
     //     user = {
@@ -126,7 +129,8 @@ function App() {
     //       });
     //   }
     // }
-    alert("Not Available");
+ await googleSign();
+ await console.log("GOOGLE")
   }
 
   /* 

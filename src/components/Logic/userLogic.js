@@ -3,8 +3,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  // GoogleAuthProvider,
-  // signInWithPopup,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import {
   collection,
@@ -16,7 +16,7 @@ import {
 } from "firebase/firestore";
 const auth = getAuth();
 const myCollection = collection(database, "users");
-// const provider = new GoogleAuthProvider();
+const provider = new GoogleAuthProvider();
 
 export async function GetAllUsers() {
   let users;
@@ -123,4 +123,11 @@ export function updateDataFromServer({
     .catch((err) => {
       console.log("INVALID TRANSACTION");
     });
+}
+
+
+export function googleSign(){
+    // signInWithPopup(auth, provider)
+    console.log("Export")
+
 }
