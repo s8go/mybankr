@@ -3,7 +3,7 @@ import AccountDetails from "./AccountDetails";
 import { userDetails } from "../../App";
 import styled from "styled-components";
 
-const MyAccount = ({ initTransaction, completeTransaction, validateUser }) => {
+const MyAccount = ({ initTransaction, completeTransaction, validateUser, users, logout }) => {
   const { currentUser: user, error } = useContext(userDetails);
   const [currentUser, setCurrentUser] = useState();
   const [userPresent, setUserPresent] = useState(false);
@@ -26,13 +26,13 @@ const MyAccount = ({ initTransaction, completeTransaction, validateUser }) => {
         <AccountDetails
           completeTransaction={completeTransaction}
           currentUser={currentUser}
+          users={users}
           initTransaction={initTransaction}
+          logout={logout}
         />
       )}
 
-      {
-        // userPresent && display === "transaction" && <Transactions initTransaction={initTransaction}/>
-      }
+   
 
       {error === true ? (
         <div></div>

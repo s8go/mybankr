@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Logo from "../../images/Bankr.png"
 
-export function DesktopNavBar(){
+export function DesktopNavBar({logout}){
     const Navigate = useNavigate();
 
-    function logout(){
-     Navigate("/login");
-     localStorage.clear()
+    async function signUserOut(){
+      await logout()
+     await Navigate("/login");
     }
     const navItems = <>
 
@@ -25,7 +25,7 @@ export function DesktopNavBar(){
           <p>Privacy Policies</p>
         </li>
         <li>
-          <p onClick={logout}>Log out</p>
+          <p onClick={signUserOut}>Log out</p>
         </li>
 
         <li>
