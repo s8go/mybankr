@@ -4,20 +4,15 @@ import {
   useLogin,
   signUser,
   updateDataFromServer,
-  googleSign
+  googleSign,
+  GetAllUsers,
+  signUserOut
 } from "./components/Logic/userLogic";
 
 //Firebase
 import { app, database } from "./firebaseConfig";
-import // getAuth,
-// createUserWithEmailAndPassword,
-// signInWithEmailAndPassword,
-// GoogleAuthProvider,
-// signInWithPopup,
-"firebase/auth";
 import {
   collection,
-  // addDoc,
   getDocs,
   doc,
   updateDoc,
@@ -34,6 +29,7 @@ import Signup from "./components/LoginSignup/Signup";
 
 import Transfer from "./components/Logic/Transfer";
 import { createGlobalStyle } from "styled-components";
+import Success from "./components/Account/Success";
 
 
 
@@ -44,12 +40,18 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [transactionType, setTransactionType] = useState(false);
   const [error, setError] = useState(false);
-  // const auth = getAuth();
+ const[ allUsers, setAllUsers ] = useState() ;
+ const [receiver, setReceiver] = useState("");
   const myCollection = collection(database, "users");
-  // const provider = new GoogleAuthProvider();
 
-  // const provider = new GoogleAuthProvider();
-  //Get the snapshots after every transactions
+useEffect(()=>{
+  async function getUsers(){
+    const users = await GetAllUsers();
+ setAllUsers(users.sort((a, b) => Math.random() - 0.5))
+  }
+  getUsers();
+}, [])
+
 
   useEffect(() => {
     onSnapshot(myCollection, (data) => {
@@ -75,62 +77,13 @@ function App() {
     const [deeUser] = await useLogin(loggedUser, message);
     setCurrentUser(deeUser);
   }
- 
 
   //SignUp with google
 
 
   async function googleValidate(sys) {
-
-    // await signInWithPopup(auth, provider)
-    //   .then((res) => {
-    //     user = {
-    //       fullName: res.user.displayName,
-    //       username: res.user.email.slice(0, res.user.email.indexOf("@")),
-    //       email: res.user.email,
-    //     };
-    //   })
-    //   .catch((err) => {
-    //     alert(err.message);
-    //   });
-
-    // await userAdd();
-
-    // function userAdd() {
-    //   if (sys === "signup") {
-    //     addDoc(myCollection, {
-    //       ...user,
-    //       accountBalance: 5000,
-    //       transactions: [
-    //         {
-    //           from: "Bankr",
-    //           amount: 5000,
-    //           type: "deposit",
-    //           number: user.username.slice(0, 2) + 1,
-    //         },
-    //       ],
-    //     }).then((res) => console.log("User Added", res));
-    //   } else if (sys === "login") {
-    //     getDocs(myCollection)
-    //       .then((response) => {
-    //         return response.docs.map((item) => {
-    //           return { ...item.data(), id: item.id };
-    //         });
-    //       })
-    //       .then((data) => {
-    //         data.filter((fetchUser) => {
-    //           let email = String(fetchUser.email).toLowerCase();
-    //           if (email === user.email.toLowerCase()) setCurrentUser(fetchUser);
-    //         });
-    //       })
-    //       .catch((err) => {
-    //         setError(true);
-    //         console.log(err.message);
-    //       });
-    //   }
-    // }
- await googleSign();
- await console.log("GOOGLE")
+ const signedUser = await googleSign();
+  setCurrentUser(signedUser);
   }
 
   /* 
@@ -139,20 +92,33 @@ function App() {
   */
 
   async function registerUser(newUser) {
-    await signUser(newUser);
+   let message = await signUser(newUser);
     await validateUser(newUser);
+
+    return message;
   }
 
+  // Sign out function to remove the current user details
+
+function logout(){
+  signUserOut()
+}
   //Initiate transaction, TransType is the transaction type
 
-  function initTransaction(transType) {
+  function initTransaction(transType, transfer="") {
     setTransactionType(transType);
+    setReceiver(transfer)
   }
+
+  console.log(receiver)
 
   //Cancel transaction
 
-  function cancelTransaction() {
-    setTransactionType(false);
+  function cancelTransaction(cancel) {
+   if( cancel === "cancel")  setTransactionType(false);
+   else setTransactionType("success");
+
+ 
   }
 
   //Validate transaction, depending on the transaction type
@@ -186,8 +152,8 @@ function App() {
               transactions: transactions,
               transNumber: transactionRef,
               transactionType: "deposit",
-              meto: function() {
-                cancelTransaction();
+              meto: function(x) {
+                cancelTransaction(x);
               },
             });
 
@@ -231,18 +197,24 @@ function App() {
         
 
           
-          {transactionType !== false && (
+          {transactionType !== false && transactionType !== "success" && (
             <Transfer
               completeTransaction={completeTransaction}
               cancelTransaction={cancelTransaction}
               transactionType={transactionType}
+              receiver={receiver}
             />
           )}
+
+          {
+            transactionType === "success" && (
+              <Success cancel={cancelTransaction}/>
+            )
+          }
 
         
 
           <Routes>
-            {/* <Route path="/dashboard/transactions" element={ <Transactions/>}></Route> */}
 
             <Route
               path="/login"
@@ -270,6 +242,8 @@ function App() {
                   completeTransaction={completeTransaction}
                   cancelTransaction={cancelTransaction}
                   validateUser={validateUser}
+                  users={allUsers}
+                  logout={logout}
                 
                 />
               }
@@ -287,11 +261,6 @@ function App() {
         </BrowserRouter>
       </userDetails.Provider>
 
-      {/* <userDetails.Provider value={currentUser}>
-        <Signup registerUser={registerUser} />
-        {!currentUser.noUser && <MyAccount />}
-        <Login validateUser={validateUser} />
-      </userDetails.Provider> */}
     </div>
   );
 }
@@ -304,5 +273,5 @@ const Global = createGlobalStyle`
 body {
   padding: 0;
   margin: 0;
-background-color: rgb(0, 0, 38);
+  background-color: rgb(0, 0, 38);
 }`

@@ -5,6 +5,8 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  signOut,
+
 } from "firebase/auth";
 import {
   collection,
@@ -12,7 +14,6 @@ import {
   getDocs,
   doc,
   updateDoc,
-  // onSnapshot,
 } from "firebase/firestore";
 const auth = getAuth();
 const myCollection = collection(database, "users");
@@ -35,7 +36,7 @@ export async function GetAllUsers() {
   return users;
 }
 
-export async function useLogin(loggedUser, message=true) {
+export async function useLogin(loggedUser, message = true) {
   let users = await GetAllUsers();
   let newUser;
   await signInWithEmailAndPassword(auth, loggedUser.email, loggedUser.password)
@@ -51,19 +52,26 @@ export async function useLogin(loggedUser, message=true) {
       });
     })
     .catch((err) => {
-      if (message)
-        alert(
-          "Invalid user details...Please signup or login with correct details"
-        );
+
     });
 
   return [newUser];
 }
 
 export async function signUser(newUser) {
-  console.log(app);
+const users = await GetAllUsers();
 
-  await createUserWithEmailAndPassword(auth, newUser.email, newUser.password)
+let [data] = users.filter((user)=>{
+  if(user.username === newUser.username){
+    return user;
+  } return undefined
+});
+
+if(data !== undefined){
+  return "Username already Exist";
+}
+
+await createUserWithEmailAndPassword(auth, newUser.email, newUser.password)
     .then((response) => {
       addDoc(myCollection, {
         fullName: newUser.fullName,
@@ -91,6 +99,8 @@ export async function signUser(newUser) {
         ) + " ...Please Login instead"
       );
     });
+
+    return;
 }
 
 export function updateDataFromServer({
@@ -120,14 +130,53 @@ export function updateDataFromServer({
     .then((res) => {
       meto();
     })
+    .then(()=> setTimeout(()=> meto("cancel"), 5000))
     .catch((err) => {
       console.log("INVALID TRANSACTION");
     });
 }
 
+export async function googleSign() {
+  let { user } = await signInWithPopup(auth, provider);
+  let users = await GetAllUsers();
 
-export function googleSign(){
-    // signInWithPopup(auth, provider)
-    console.log("Export")
+  const [data] = await users.filter((curr) => {
+    if (curr.email === user.email) {
+      return curr;
+    } return undefined;
+  });
+
+  if (data !== undefined){
+    return data
+  } else {
+
+const newUser =  {
+fullName: user.displayName,
+username: user.email.slice(0, user.email.indexOf("@")),
+accountBalance: 5000,
+email: user.email,
+transactions: [
+  {
+    from: "Bankr",
+    amount: 5000,
+    type: "deposit",
+    number: user.email.slice(0, 2) + 1,
+  },
+],
+};
+
+ addDoc(myCollection, newUser)
+
+    return newUser;
+}
+}
+
+
+export function signUserOut(){
+signOut(auth).then(() => {
+  // Sign-out successful.
+}).catch((error) => {
+  // An error happened.
+});
 
 }

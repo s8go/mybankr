@@ -3,19 +3,15 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Transactions from "./Transactions";
 import profile_img from "../../images/profile.webp"
-// import { FaMoon, FaSun } from "react-icons/fa";
 import {DesktopNavBar} from "../NavBar/DesktopNavBar";
 import MobileNav from "../NavBar/MobileNav";
 
-// import { useNavigate } from "react-router-dom";
-// import {userDetails} from "../../App"\\
-
-// import Login from "../LoginSignup/Login";
-
 const AccountDetails = ({
   initTransaction,
+  users,
   completeTransaction,
   currentUser,
+  logout
 }) => {
 
   const today = new Date();
@@ -24,8 +20,8 @@ const AccountDetails = ({
     <Dashboard>
      {
       currentUser.username !== undefined && <div>
-       <MobileNav/>
-      <DesktopNavBar/>
+       <MobileNav logout={logout}/>
+      <DesktopNavBar logout={logout}/>
       </div>
      }
 
@@ -50,7 +46,7 @@ const AccountDetails = ({
             </div>
 
             <div className="details">
-              <h2 className="name">{currentUser.username}</h2>
+              <h2 className="name">{currentUser.fullName}</h2>
               <h4>Exp. 08/24</h4>
             </div>
 
@@ -73,20 +69,16 @@ const AccountDetails = ({
 
           <h5>Transfer To:</h5>
           <div className="transfer-to">
-            <div>
-              <img src={profile_img} alt="Display" />
-              <p>jamse45</p>
-            </div>
-
-            <div>
-              <img src={profile_img} alt="Display" />
-              <p>jamse45</p>
-            </div>
-
-            <div>
-              <img src={profile_img} alt="Display" />
-              <p>jamse45</p>
-            </div>
+           {
+            users.filter(user => user.username !== currentUser.username).slice(0, 3).map((user)=>{
+              return (
+                <div key={user.username} onClick={()=>initTransaction("transfer", user.username)}>
+                <img src={profile_img} alt="Display" />
+                <p>{user.username}</p>
+              </div>
+              )
+            })
+           }
           </div>
           <h5>Recent Transactions:</h5>
           <Recent>
@@ -124,6 +116,7 @@ const AccountDetails = ({
         <Redirect>
          <div>
           <h1>User Not Found.</h1>
+          <p>please login or signup with correct details</p>
         <div> <Link to={"/login"} className="login">Login</Link> <Link to={"/signup"} className="signup">Signup</Link></div>
          </div>
         </Redirect>
@@ -140,6 +133,11 @@ height: 100vh;
 display: grid;
 place-items: center;
 text-align: center;
+
+& p{
+  color: rgb(152,152, 152);
+  font-size: max(.8vw, .8em);
+}
 
 & h1 {
   color: rgb(152,152, 152);
@@ -291,7 +289,7 @@ const Card = styled.div`
   }
 
   & .details h2{
-    font-size: max(1.2em, 1.2vw);
+    font-size: max(1em, 1vw);
   }
 
 

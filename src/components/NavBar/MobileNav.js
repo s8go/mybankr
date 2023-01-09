@@ -5,7 +5,7 @@ import Hamburger from "../../images/icon-hamburger.svg";
 import Close from "../../images/icon-close.svg";
 import { useNavigate } from "react-router-dom";
 
-const MobileNav = () => {
+const MobileNav = ({logout}) => {
   const [isOpened, setOpened] = useState(false);
   const Navigate = useNavigate();
 
@@ -14,9 +14,9 @@ const MobileNav = () => {
   }
 
 
-  function logout(){
-   Navigate("/login");
-   localStorage.clear()
+  async function signUserOut(){
+    await logout()
+   await Navigate("/login");
   }
 
   return (
@@ -45,7 +45,7 @@ const MobileNav = () => {
           <p>Privacy Policies</p>
         </li>
         <li>
-        <p onClick={logout}>Log out</p>
+        <p onClick={signUserOut}>Log out</p>
         </li>
       </ul>
     </Mobile>

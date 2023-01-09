@@ -5,6 +5,7 @@ const Transfer = ({
   completeTransaction,
   cancelTransaction,
   transactionType,
+  receiver
 }) => {
   const [transactionDetails, setTransactionDetails] = useState({});
 
@@ -24,15 +25,17 @@ const Transfer = ({
 
   return (
     <TransferTrans>
-      <form
+      
+ <form
         onSubmit={(e) => {
           e.preventDefault();
-          completeTransaction(transactionDetails, transactionType);
+          completeTransaction({...transactionDetails,
+          to: receiver === "" ? transactionDetails.to : receiver}, transactionType);
           setProgress("...");
         }}
       >
         <div className="cancel">
-          <p onClick={cancelTransaction}>
+          <p onClick={()=>cancelTransaction("cancel")}>
             X
           </p>
         </div>
@@ -57,7 +60,7 @@ const Transfer = ({
               <input
                 type="text"
                 name="to"
-                value={transactionDetails.to || ""}
+                value={transactionDetails.to || receiver}
                 onChange={(e) => {
                   handleInput(e.target);
                 }}
@@ -85,6 +88,7 @@ const Transfer = ({
           )}
         </div>
       </form>
+
     </TransferTrans>
   );
 };
@@ -92,7 +96,7 @@ const Transfer = ({
 export default Transfer;
 
 
-const TransferTrans = styled.div`
+export const TransferTrans = styled.div`
 position: fixed;
 height: 100vh;
 width: 100vw;
