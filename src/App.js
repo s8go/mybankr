@@ -36,7 +36,6 @@ import Success from "./components/Account/Success";
 export const userDetails = createContext();
 
 function App() {
-  console.log(app)
   const [currentUser, setCurrentUser] = useState(null);
   const [transactionType, setTransactionType] = useState(false);
   const [error, setError] = useState(false);
@@ -109,8 +108,6 @@ function logout(){
     setTransactionType(transType);
     setReceiver(transfer)
   }
-
-  console.log(receiver)
 
   //Cancel transaction
 
