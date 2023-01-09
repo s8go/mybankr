@@ -176,7 +176,6 @@ function logout(){
       });
     }
   }
-
   
   return (
     <div>
@@ -205,7 +204,7 @@ function logout(){
 
           {
             transactionType === "success" && (
-              <Success cancel={cancelTransaction}/>
+              <Success cancel={cancelTransaction} app={app}/>
             )
           }
 

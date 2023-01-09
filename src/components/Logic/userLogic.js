@@ -92,6 +92,8 @@ await createUserWithEmailAndPassword(auth, newUser.email, newUser.password)
       localStorage.password = newUser.password;
     })
     .catch((err) => {
+      console.log(app);
+      
       alert(
         err.message.slice(
           err.message.indexOf("(") + 1,
@@ -180,3 +182,5 @@ signOut(auth).then(() => {
 });
 
 }
+
+
